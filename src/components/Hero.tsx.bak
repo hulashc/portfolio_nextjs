@@ -1,0 +1,29 @@
+"use client";
+
+import { useState } from "react";
+
+export function Hero() {
+  const [isDark, setIsDark] = useState(true);
+
+  const bg = isDark ? "#161616" : "#E3DACC";
+  const text = isDark ? "white" : "#161616";
+  const borderColor = isDark ? "rgba(255,255,240,0.5)" : "rgba(0,0,0,0.4)";
+
+  return (
+    <div className="w-full" style={{ backgroundColor: bg }}>
+      <div className="w-full p-2 md:p-4" style={{ backgroundColor: bg, height: "calc(100vh - 90px)" }}>
+        {/* Big Box */}
+        <div className="border" style={{ borderColor, height: "300px" }}>
+        </div>
+
+        {/* 2 Small Boxes */}
+        <div className="grid grid-cols-2">
+          <div className="border" style={{ borderColor, height: "150px" }}>
+          </div>
+          <div className="border" style={{ borderColor, height: "150px" }}>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
