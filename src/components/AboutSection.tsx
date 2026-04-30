@@ -14,10 +14,9 @@ export function AboutSection() {
     <div id="about-section" className="w-full" style={{ backgroundColor: bg, marginTop: "-2px" }}>
       <div className="p-4 text-center" style={{ border: `1px solid ${borderColor}` }}>
         <h2 className="text-xl md:text-4xl lg:text-6xl font-bold uppercase mb-4" style={{ color: text }}>Data Engineer → AI/ML Engineer</h2>
-        <p className="text-sm md:text-xl mb-2" style={{ color: text }}>AWS Consultant · Cloud & Data Platforms</p>
+        <p className="text-sm md:text-xl mb-2" style={{ color: text }}>AWS Consultant / Data Engineer · Cloud & Data Platforms</p>
         <p className="text-sm md:text-xl font-bold mb-4" style={{ color: text }}>AWS · Azure · GCP · MLOps · Spark · Python · Scalable AI Systems</p>
         <div className="space-y-1" style={{ color: text }}>
-          <p className="text-xs md:text-lg">linkedin.com/in/hulash</p>
           <p className="text-xs md:text-lg">London, United Kingdom</p>
         </div>
       </div>
@@ -28,7 +27,7 @@ export function AboutSection() {
             <div className="flex justify-between items-start gap-4">
               <div>
                 <p className="text-sm md:text-lg font-bold" style={{ color: text }}>Innowise Solutions</p>
-                <p className="text-xs" style={{ color: text }}>AWS Consultant</p>
+                <p className="text-xs" style={{ color: text }}>AWS Consultant / Data Engineer</p>
               </div>
               <p className="text-xs" style={{ color: text, whiteSpace: "nowrap" }}>2024 - Present</p>
             </div>
