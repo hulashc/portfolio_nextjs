@@ -61,3 +61,16 @@
 .light .nav-box:hover .nav-text {
   color: #DADADA !important;
 }
+
+@keyframes psy {
+  0% { transform: scaleY(0.3) rotate(0deg); height: 6px; }
+  25% { transform: scaleY(1.2) rotate(2deg); height: 28px; }
+  50% { transform: scaleY(0.5) rotate(-1deg); height: 14px; }
+  75% { transform: scaleY(1.1) rotate(-2deg); height: 24px; }
+  100% { transform: scaleY(0.3) rotate(0deg); height: 6px; }
+}
+
+@keyframes progress {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
