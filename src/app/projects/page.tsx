@@ -3,10 +3,13 @@
 import Link from "next/link";
 import { useTheme } from "@/components/ThemeProvider";
 import { useState } from "react";
+import { projects, Project } from "@/data/projects";
+import DetailPopup from "@/components/DetailPopup";
 
 export default function ProjectsPage() {
   const { isDark, toggleDark } = useTheme();
   const [hoveredBox, setHoveredBox] = useState<string | null>(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const bg = isDark ? "#161616" : "#DADADA";
   const text = isDark ? "white" : "black";
@@ -58,17 +61,27 @@ export default function ProjectsPage() {
         <div className="p-4 md:p-6" style={{ border: `1px solid ${borderColor}`, minHeight: "calc(90vh - 10vh)", marginTop: "-2px" }}>
           <h1 className="text-2xl md:text-4xl lg:text-6xl font-bold uppercase mb-4 md:mb-8" style={{ color: text }}>Projects</h1>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4" style={{ backgroundColor: bg }}>
-            <div className="p-3 md:p-4" style={{ border: `1px solid ${borderColor}` }}>
-              <h2 className="text-base md:text-xl lg:text-2xl font-bold uppercase mb-2" style={{ color: text }}>Real-Time Financial Analytics</h2>
-              <p className="text-xs md:text-sm" style={{ color: text }}>Kafka · Spark Streaming · AWS · PostgreSQL</p>
-            </div>
-            <div className="p-3 md:p-4" style={{ border: `1px solid ${borderColor}` }}>
-              <h2 className="text-base md:text-xl lg:text-2xl font-bold uppercase mb-2" style={{ color: text }}>Generative AI Data Pipeline</h2>
-              <p className="text-xs md:text-sm" style={{ color: text }}>LLM APIs · RAG · Python · AWS Lambda</p>
-            </div>
+            {projects.map((project) => (
+              <div
+                key={project.id}
+                className="p-3 md:p-4 cursor-pointer"
+                style={{ border: `1px solid ${borderColor}`, backgroundColor: bg }}
+                onClick={() => setSelectedProject(project)}
+              >
+                <h2 className="text-base md:text-xl lg:text-2xl font-bold uppercase mb-2" style={{ color: text }}>{project.title}</h2>
+                <p className="text-xs md:text-sm" style={{ color: text, opacity: 0.6 }}>{project.techStack.slice(0, 4).join(' · ')}{project.techStack.length > 4 ? '...' : ''}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
+
+      <DetailPopup
+        isOpen={selectedProject !== null}
+        onClose={() => setSelectedProject(null)}
+        title={selectedProject?.title || ''}
+        sections={selectedProject?.sections || []}
+      />
 
       <div style={{ borderBottom: `1px solid ${borderColor}`, borderLeft: `1px solid ${borderColor}`, borderRight: `1px solid ${borderColor}` }} className="p-4">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">

@@ -15,6 +15,31 @@
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  body::-webkit-scrollbar {
+    display: none;
+  }
+
+  * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  *::-webkit-scrollbar {
+    display: none;
+  }
+
+  .popup-scroll::-webkit-scrollbar {
+    display: block;
+    width: 8px;
+  }
+
+  .popup-scroll {
+    scrollbar-width: thin;
+    -ms-overflow-style: auto;
   }
 
   *, *::before, *::after {
