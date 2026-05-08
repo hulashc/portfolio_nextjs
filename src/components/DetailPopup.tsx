@@ -9,9 +9,10 @@ interface DetailPopupProps {
   onClose: () => void;
   title: string;
   sections: SectionType[];
+  link?: string;
 }
 
-export default function DetailPopup({ isOpen, onClose, title, sections }: DetailPopupProps) {
+export default function DetailPopup({ isOpen, onClose, title, sections, link }: DetailPopupProps) {
   const { isDark } = useTheme();
 
   const borderColor = isDark ? 'rgba(255,255,240,0.7)' : 'rgba(0,0,0,0.6)';
@@ -379,36 +380,67 @@ export default function DetailPopup({ isOpen, onClose, title, sections }: Detail
             flexShrink: 0,
           }}
         >
-          <h2
-            style={{
-              color: textColor,
-              fontSize: 'clamp(0.9rem, 2.5vw, 1.25rem)',
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              margin: 0,
-            }}
-          >
-            {title}
-          </h2>
-          <button
-            onClick={onClose}
-            style={{
-              background: 'none',
-              border: `1px solid ${borderColor}`,
-              color: textColor,
-              width: '36px',
-              height: '36px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '1.25rem',
-              flexShrink: 0,
-            }}
-            aria-label="Close popup"
-          >
-            ×
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0 }}>
+            <h2
+              style={{
+                color: textColor,
+                fontSize: 'clamp(0.9rem, 2.5vw, 1.25rem)',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                margin: 0,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {title}
+            </h2>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
+            {link && (
+              <a
+                href={link}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  background: 'none',
+                  border: `1px solid ${borderColor}`,
+                  color: textColor,
+                  width: '36px',
+                  height: '36px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1.25rem',
+                  flexShrink: 0,
+                  textDecoration: 'none',
+                }}
+                aria-label="Open live site"
+              >
+                &#x2197;
+              </a>
+            )}
+            <button
+              onClick={onClose}
+              style={{
+                background: 'none',
+                border: `1px solid ${borderColor}`,
+                color: textColor,
+                width: '36px',
+                height: '36px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.25rem',
+                flexShrink: 0,
+              }}
+              aria-label="Close popup"
+            >
+              ×
+            </button>
+          </div>
         </div>
         <div
           className="popup-scroll"

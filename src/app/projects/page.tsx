@@ -81,6 +81,7 @@ export default function ProjectsPage() {
         onClose={() => setSelectedProject(null)}
         title={selectedProject?.title || ''}
         sections={selectedProject?.sections || []}
+        link={selectedProject?.link}
       />
 
       <div style={{ borderBottom: `1px solid ${borderColor}`, borderLeft: `1px solid ${borderColor}`, borderRight: `1px solid ${borderColor}` }} className="p-4">

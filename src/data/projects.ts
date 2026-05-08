@@ -67,187 +67,193 @@ export interface Project {
 export const projects: Project[] = [
   {
     id: 'agriyield-mlops',
-    title: 'Agricultural Yield Prediction Platform',
+    title: 'AgriYield MLOps',
+    link: 'https://agri-yield-latest.onrender.com',
     sections: [
       {
         type: 'hero',
-        subtitle: 'A production-grade machine learning pipeline that ingests IoT sensor data, satellite imagery, and weather streams — engineers temporal features — and serves crop yield predictions with full drift monitoring and automated retraining.',
+        subtitle: 'A production-grade ML-powered crop yield prediction platform for UK agricultural fields. Combines live weather data, soil attributes, and an XGBoost regression model to predict yield (kg/ha) per field — served via a real-time FastAPI backend and an interactive Leaflet map dashboard.',
       },
       {
         type: 'stats',
         items: [
-          { num: '12', label: 'Weeks to Delivery' },
-          { num: '6', label: 'Pipeline Phases' },
-          { num: '14+', label: 'Integrated Tools' },
-          { num: '~£0', label: 'Local Dev Cost' },
-          { num: '500', label: 'Req/s Load Target' },
+          { num: '113', label: 'UK Fields Mapped' },
+          { num: 'XGBoost', label: 'Regression Model' },
+          { num: '80%', label: 'Confidence Interval' },
+          { num: '~50s', label: 'Cold Start (Render Free)' },
+          { num: 'CI/CD', label: 'GitHub Actions → Render' },
         ],
       },
       {
         type: 'section',
-        title: 'Why I Built This',
+        title: 'Features',
       },
       {
         type: 'text',
-        content: `Most ML tutorials stop at the Jupyter notebook. They show you how to train a model, maybe how to wrap it in a Flask endpoint — and then nothing. No versioning, no monitoring, no retraining, no production-grade feature engineering.
-
-Agriculture is a deliberately hard domain for ML. Your data has strong seasonality, sparse coverage, multi-resolution sources, and ground truth that arrives weeks after prediction. Naive approaches fail visibly — a model trained on shuffled data leaks future harvest information into training, producing results that look great on paper and collapse in the real world.
-
-I chose this domain because it demands rigor. You can't take shortcuts on temporal splits. You can't ignore missing satellite scenes. You can't treat seasonal drift as model failure. Every corner of this project forces an engineering decision that would be invisible in a generic ML demo.
-
-The goal isn't just a working model — it's a traceable, maintainable, operationally honest system that a real team could run in production.`,
+        content: `🗺️ Interactive UK field map — 113 fields coloured by predicted yield (red → green)
+🤖 XGBoost yield model — trained on synthetic UK agricultural data, baked into the Docker image at CI time
+🌤️ Live weather integration — Open-Meteo API fetches real-time temperature, precipitation, and solar radiation per field
+📊 Confidence intervals — every prediction includes an 80% CI band
+🚨 Drift detection — PSI-based feature drift monitoring with per-field warning badges
+🔄 CI/CD pipeline — GitHub Actions trains the model, builds the Docker image, pushes to GHCR, and deploys to Render on every push to main
+🧠 Smart caching — Redis (with in-memory fallback) caches weather API responses for 1 hour
+📈 Prometheus metrics — /metrics endpoint for Grafana integration`,
       },
       {
         type: 'skill-badges',
         items: [
-          { text: 'Data Engineering', highlight: true },
-          { text: 'MLOps', highlight: true },
-          { text: 'Feature Stores', highlight: true },
-          { text: 'Stream Processing', highlight: true },
-          { text: 'Apache Kafka' },
-          { text: 'Apache Spark' },
-          { text: 'Feast' },
-          { text: 'MLflow' },
-          { text: 'DVC' },
-          { text: 'XGBoost' },
-          { text: 'Optuna' },
-          { text: 'FastAPI' },
-          { text: 'Kubernetes' },
-          { text: 'Helm' },
-          { text: 'Terraform' },
-          { text: 'Prefect' },
-          { text: 'Evidently AI' },
-          { text: 'Great Expectations' },
-          { text: 'Prometheus' },
-          { text: 'Grafana' },
-          { text: 'Redis' },
+          { text: 'XGBoost', highlight: true },
+          { text: 'FastAPI', highlight: true },
+          { text: 'CI/CD', highlight: true },
+          { text: 'Docker', highlight: true },
           { text: 'Python' },
-          { text: 'SQL' },
-          { text: 'Docker' },
+          { text: 'Leaflet.js' },
+          { text: 'Open-Meteo API' },
+          { text: 'Redis' },
+          { text: 'Prometheus' },
+          { text: 'GitHub Actions' },
+          { text: 'GHCR' },
+          { text: 'Render' },
+          { text: 'Pydantic' },
+          { text: 'scikit-learn' },
+          { text: 'pandas' },
+          { text: 'NumPy' },
+          { text: 'Uvicorn' },
         ],
       },
       {
         type: 'section',
-        title: 'Pipeline Architecture',
-        content: 'Seven layers working in sequence — from raw sensor events all the way to a monitored, self-retraining inference service.',
+        title: 'Architecture',
+        content: 'GitHub Actions CI trains and packages the model into a Docker image, which is deployed on Render. The FastAPI backend serves predictions using live weather data and cached responses.',
       },
       {
         type: 'architecture-cards',
         items: [
           {
-            icon: '📡',
-            title: 'Ingestion',
-            description: 'Three Kafka topics ingest IoT sensor readings, satellite NDVI scenes, and weather events with schema enforcement at the wire level.',
-            stack: ['Kafka', 'Avro', 'Schema Registry', 'Faker'],
+            icon: '🤖',
+            title: 'ML Model',
+            description: 'XGBoost Regressor trained on synthetic UK agricultural data. Features include lat, lon, area, crop type, soil type, region, weather vars, ET₀, soil moisture, NDVI, and week of year. RMSE ~500-800 kg/ha.',
+            stack: ['XGBoost', 'scikit-learn', 'pandas', 'NumPy'],
             color: '#4eaa78',
           },
           {
-            icon: '🛡️',
-            title: 'Validation',
-            description: 'Great Expectations suites check every batch. Invalid data is quarantined and alerted on — never silently passed downstream.',
-            stack: ['Great Expectations', 'Prefect'],
+            icon: '🌤️',
+            title: 'Live Weather Ingestion',
+            description: 'Open-Meteo API fetches temperature, precipitation, and solar radiation per field at inference time. Fallback chain: Redis cache → Live API → In-memory → UK seasonal defaults.',
+            stack: ['Open-Meteo API', 'Redis', 'httpx'],
             color: '#6ba3e0',
           },
           {
-            icon: '⚙️',
-            title: 'Feature Engineering',
-            description: 'Spark aligns three sources (15-min, hourly, weekly) into weekly field-level aggregates. Gap-filling for satellite data uses temporal interpolation or spatial proxies — always flagged.',
-            stack: ['Spark on k8s', 'Parquet', 'DVC'],
+            icon: '🚀',
+            title: 'FastAPI Serving',
+            description: 'GET /fields predicts all 113 fields with confidence intervals. GET /metrics exposes Prometheus endpoints. Static HTML/JS dashboard served via Leaflet.js map.',
+            stack: ['FastAPI', 'Uvicorn', 'Pydantic', 'Leaflet.js'],
             color: '#e07a3a',
           },
           {
-            icon: '🗄️',
-            title: 'Feature Store',
-            description: 'Feast manages point-in-time-correct training joins and nightly Redis materialization for sub-millisecond online lookups at inference time.',
-            stack: ['Feast', 'Redis', 'S3 / GCS'],
+            icon: '🔄',
+            title: 'CI/CD Pipeline',
+            description: 'GitHub Actions generates training data, trains XGBoost, bakes model.pkl into Docker image, pushes to GHCR, and triggers Render deploy — all on every push to main.',
+            stack: ['GitHub Actions', 'Docker', 'GHCR', 'Render'],
             color: '#a86fdf',
           },
           {
-            icon: '🏋️',
-            title: 'Training Pipeline',
-            description: 'XGBoost trained with Optuna hyperparameter search over time-aware cross-validation. Every run logged to MLflow with dataset hash, feature versions, and fold metrics.',
-            stack: ['XGBoost', 'Optuna', 'MLflow', 'TimeSeriesSplit'],
-            color: '#e8af34',
-          },
-          {
-            icon: '🚀',
-            title: 'Serving Layer',
-            description: 'FastAPI exposes /predict and /predict/batch endpoints on Kubernetes with HPA scaling from 2 to 10 replicas. Health checks return 503 when Redis or the model are degraded.',
-            stack: ['FastAPI', 'Helm', 'HPA', 'Prometheus'],
-            color: '#4eaa78',
-          },
-          {
             icon: '📊',
-            title: 'Monitoring',
-            description: 'Evidently AI computes weekly PSI and concept drift. A two-window strategy separates seasonal shift from genuine degradation — triggering retraining only when necessary.',
-            stack: ['Evidently AI', 'Grafana', 'Prefect'],
+            title: 'Monitoring & Drift',
+            description: 'PSI (Population Stability Index) computed per feature on every /fields call. Fields with PSI > 0.2 display a DRIFT warning badge. Prometheus metrics available at /metrics.',
+            stack: ['Prometheus', 'PSI', 'Grafana'],
             color: '#dd6974',
+          },
+          {
+            icon: '🧠',
+            title: 'Smart Caching',
+            description: 'Redis caches weather API responses for 1 hour with in-memory fallback. Ensures the free-tier Render instance stays responsive under load without hammering the weather API.',
+            stack: ['Redis', 'In-memory Cache'],
+            color: '#e8af34',
           },
         ],
       },
       {
         type: 'section',
-        title: '12-Week Build Plan',
-        content: 'Each phase has concrete deliverables and a defined exit condition before the next phase begins.',
+        title: 'ML Model',
+        content: 'XGBoost Regressor trained end-to-end in CI — no stale artefacts, no manual uploads.',
       },
       {
-        type: 'phases',
-        items: [
-          {
-            num: '0',
-            title: 'Project Setup',
-            badge: 'Days 1–3',
-            description: 'Monorepo structure, pinned dependencies, pre-commit hooks (ruff, mypy, detect-secrets), local Kubernetes cluster with Kind or k3d, Terraform IaC for cloud infra, team ownership map. Get the foundation right before writing a single line of pipeline code.',
-            outcomes: ['Repo live', 'IaC written', '3 namespaces'],
-          },
-          {
-            num: '1',
-            title: 'Data Ingestion Layer',
-            badge: 'Weeks 1–2',
-            description: 'Deploy Kafka with Schema Registry. Build a realistic IoT sensor simulator with deliberate fault modes (10% dropout, calibration drift, burst delivery). Integrate NASA Earthdata STAC API for NDVI. Connect NOAA GHCN and OpenAQ weather streams. Great Expectations validates every batch and quarantines bad data.',
-            outcomes: ['3 Kafka topics', 'Schema enforced', 'GE suites active'],
-          },
-          {
-            num: '2',
-            title: 'Feature Engineering & Feature Store',
-            badge: 'Weeks 3–4',
-            description: 'Spark on Kubernetes aligns IoT (15-min), weather (hourly), and satellite (weekly) data into weekly field-level feature vectors. Two gap-fill strategies for cloud-covered satellite scenes, both with explicit boolean flags. Feast feature store with point-in-time-correct training joins. DVC versions every Parquet output.',
-            outcomes: ['Spark jobs running', 'Feast configured', 'DVC versioning', 'No data leakage'],
-          },
-          {
-            num: '3',
-            title: 'Model Training Pipeline',
-            badge: 'Weeks 5–6',
-            description: 'Baseline mean-by-crop-type logged first. XGBoost trained with Optuna TPE hyperparameter search, using TimeSeriesSplit (5 folds) — never shuffle split. Every run logged to MLflow with DVC dataset hash, Feast feature versions, fold metrics, and season/crop tags. Promotion gated on 2% RMSE improvement with no crop-type regression.',
-            outcomes: ['Baseline logged', 'Optuna tuning', 'MLflow registry', 'Promotion gate'],
-          },
-          {
-            num: '4',
-            title: 'Serving Layer',
-            badge: 'Weeks 7–8',
-            description: 'FastAPI serves /predict and /predict/batch with online Feast feature lookups from Redis. Multi-stage Docker build, Helm chart with HPA (min 2, max 10 replicas) scaling on CPU and prediction_queue_depth. /health endpoint validates model load, Redis connectivity, and Feast materialization freshness — returns 503 on any failure.',
-            outcomes: ['API deployed', 'HPA configured', 'Health checks'],
-          },
-          {
-            num: '5',
-            title: 'Monitoring & Drift Detection',
-            badge: 'Weeks 9–10',
-            description: 'Evidently AI runs weekly PSI-based data drift and concept drift reports. Two reference windows: a 4-week rolling window for short-term checks and a season-matched historical window to distinguish expected seasonal change from genuine model degradation. Prefect triggers full retraining on PSI > 0.2 on 30% of features or 10% RMSE regression. Grafana dashboards expose all metrics via Prometheus.',
-            outcomes: ['Drift reports live', 'Auto-retrain', 'Grafana dashboard'],
-          },
-          {
-            num: '6',
-            title: 'Integration, Hardening & Documentation',
-            badge: 'Weeks 11–12',
-            description: 'Parent Prefect DAG wires all phases with checkpoint logic — abort on GE failure, keep current model if promotion fails. Model cards per version. Data contract YAML specs per upstream source. Locust load test targeting 500 req/s with p99 < 200ms. Final integration test: full pipeline from synthetic data to registered model to drift report, unassisted, in under 4 hours.',
-            outcomes: ['E2E DAG', 'Model cards', 'Load tested', 'Unassisted run'],
-          },
-        ],
+        type: 'text',
+        content: `Algorithm: XGBoost Regressor
+Target: yield_kg_per_ha
+Features: lat, lon, area, crop type, soil type, region, temperature, precipitation, solar radiation, ET₀, soil moisture, NDVI, week of year
+Train/test split: 80/20
+RMSE: ~500-800 kg/ha (synthetic data)
+Confidence interval: ±15% of prediction (configurable via CI_WIDTH env var)
+
+The model is retrained from scratch on every CI run. The trained model.pkl is baked directly into the production Docker image — no stale artefacts, no manual uploads.`,
+      },
+      {
+        type: 'section',
+        title: 'Live Weather Integration',
+      },
+      {
+        type: 'text',
+        content: `Weather data is fetched from the Open-Meteo API (free, no API key required) for each field's coordinates.
+
+Features used at inference time:
+- Temperature (°C) — temperature_2m_max today
+- Precipitation (mm) — precipitation_sum today
+- Solar radiation (MJ/m²) — shortwave_radiation_sum today
+
+Fallback chain: Redis cache → Live API → In-memory cache → UK seasonal defaults. The STALE DATA badge appears when defaults are used.`,
+      },
+      {
+        type: 'section',
+        title: 'Project Structure',
+      },
+      {
+        type: 'text',
+        content: `agri-yield/
+├── .github/workflows/deploy.yml   # Train → Build → Push → Deploy
+├── data/seed/uk_fields.csv        # 113 UK farm fields with metadata
+├── ingestion/openmeteo_live.py    # Live weather fetcher with caching
+├── serving/
+│   ├── app.py                     # FastAPI app + /fields endpoint
+│   ├── model.py                   # Model loader + predict()
+│   └── static/                    # Dashboard HTML/CSS/JS
+├── training/
+│   ├── train_and_export.py        # XGBoost training script
+│   └── utils/features.py          # Canonical FEATURE_COLS
+├── monitoring/drift.py            # PSI drift detector
+├── generate_data.py               # Synthetic UK agricultural data generator
+├── Dockerfile.prod                # Production image (bakes model.pkl)
+└── pyproject.toml`,
+      },
+      {
+        type: 'section',
+        title: 'CI/CD Pipeline',
+        content: 'Every push to main triggers a fully automated pipeline.',
+      },
+      {
+        type: 'text',
+        content: `push to main
+  │
+  ▼
+[1] Generate synthetic training data
+  │
+  ▼
+[2] Train XGBoost → save model.pkl
+  │
+  ▼
+[3] docker build -f Dockerfile.prod (bakes model.pkl in)
+  │
+  ▼
+[4] docker push ghcr.io/hulashc/agri-yield:latest
+  │
+  ▼
+[5] curl RENDER_DEPLOY_HOOK → Render redeploys`,
       },
       {
         type: 'section',
         title: 'Three Decisions That Matter',
-        content: 'These aren\'t implementation details — they\'re what separates a portfolio MLOps project from a toy demo.',
+        content: 'These aren\'t implementation details — they\'re what separates this project from a Jupyter notebook demo.',
       },
       {
         type: 'decisions',
@@ -256,49 +262,47 @@ The goal isn't just a working model — it's a traceable, maintainable, operatio
             num: '01',
             badge: 'Non-negotiable',
             title: 'Temporal train/test splitting',
-            description: 'Any shuffle-based split in this pipeline is a bug, not a suboptimal choice. Yield data has strong temporal autocorrelation — shuffling leaks future harvest seasons into training, inflating every metric while the deployed model silently fails. This project uses TimeSeriesSplit with 5 folds throughout. The validation set is always in the future relative to training.',
+            description: 'Any shuffle-based split in this pipeline is a bug. Yield data has strong temporal autocorrelation — shuffling leaks future harvest seasons into training, inflating every metric while the deployed model silently fails. Uses standard 80/20 split with time-aware ordering.',
           },
           {
             num: '02',
-            badge: 'Architectural innovation',
-            title: 'Two-window drift detection',
-            description: 'A single PSI threshold would trigger retraining every autumn when soil temperatures shift predictably. Instead, the system runs two reference windows: a 4-week rolling window catches short-term instability, and a season-matched historical window (same week, prior growing cycle) catches genuine concept drift. Seasonal variation is expected and handled separately from real model degradation.',
+            badge: 'Architectural decision',
+            title: 'Model baked at CI time, not at serving time',
+            description: 'The model.pkl is trained and baked into the Docker image during CI, not downloaded at container start. This eliminates runtime dependency on model registries, reduces cold start time, and guarantees every deploy has a matching, immutable model artefact.',
           },
           {
             num: '03',
-            badge: 'Data lineage',
-            title: 'End-to-end traceable lineage',
-            description: 'Every prediction traces back to its exact inputs. The chain is: raw Kafka message → DVC-versioned Parquet → Feast feature view → MLflow experiment run → deployed model → prediction log. Given a prediction made on any date, you can identify the exact sensor readings that produced it, which model version served it, and what dataset it was trained on.',
+            badge: 'Resilience',
+            title: 'Multi-layer weather fallback chain',
+            description: 'Weather API failures don\'t crash the service. A four-level fallback chain (Redis → Live API → In-memory → UK seasonal defaults) ensures predictions always return, with a STALE DATA badge when defaults are used. This is production-grade defensive design.',
           },
         ],
       },
       {
         type: 'section',
         title: 'Is This Free to Run?',
-        content: 'Most of the stack is open source and self-hostable. The honest answer is: it depends entirely on where you run it.',
+        content: 'Yes — the entire project runs on free tiers. No paid API keys required.',
       },
       {
         type: 'cost',
         sections: [
           {
-            title: '✅ Fully free to use (open source / free APIs)',
+            title: '✅ Fully free',
             items: [
-              'Kafka, Spark, Feast, DVC, MLflow — all open source, self-hosted',
-              'XGBoost, Optuna, FastAPI, Prefect (self-hosted) — open source',
-              'Evidently AI, Great Expectations, Grafana, Prometheus — open source',
-              'Docker, Kubernetes — open source runtimes',
-              'NASA Earthdata (Sentinel-2 scenes) — free with account registration',
-              'NOAA GHCN, OpenAQ — free public APIs',
+              'XGBoost, FastAPI, Uvicorn — all open source',
+              'Open-Meteo API — free, no API key required',
+              'GitHub Actions — free tier for public repos',
+              'GitHub Container Registry (GHCR) — free for public images',
+              'Render free tier — hosts the live demo (expect ~50s cold start)',
+              'Redis (in-memory fallback) — no separate Redis instance needed',
             ],
           },
           {
-            title: '💰 Where real cost enters',
+            title: '💰 If scaling up',
             items: [
-              'Cloud Kubernetes (GKE/EKS) running 24/7 — main cost driver',
-              'Spark executors for batch feature jobs — billed per compute hour',
-              'Redis instance on cloud — small but not zero',
-              'S3 / GCS object storage for DVC and MLflow artifacts — pennies at portfolio scale',
-              'Confluent Cloud Kafka — free tier expires after 30 days; use self-hosted Strimzi instead',
+              'Paid Render instance — removes cold start, ~$7/month',
+              'Dedicated Redis — for persistent caching across restarts',
+              'Custom domain — if you want to brand the deployment',
             ],
           },
         ],
@@ -306,48 +310,47 @@ The goal isn't just a working model — it's a traceable, maintainable, operatio
       {
         type: 'section',
         title: 'What This Project Proves',
-        content: 'This isn\'t a tutorial follow-along. Each component demonstrates a distinct engineering capability that translates directly to a data engineering or MLOps role.',
+        content: 'Every component demonstrates a distinct engineering capability for data engineering and MLOps roles.',
       },
       {
         type: 'recruiter-cards',
         items: [
           {
             icon: '🔗',
-            title: 'Pipeline Design at Scale',
-            description: 'Designing, building, and integrating seven distinct pipeline layers — each with its own failure modes, latency requirements, and data contracts — proves system-level thinking beyond individual tool proficiency.',
+            title: 'End-to-End MLOps',
+            description: 'From synthetic data generation to deployed, monitored inference — the full lifecycle is automated in CI/CD. No manual steps, no Jupyter notebooks in production.',
           },
           {
-            icon: '⏱️',
-            title: 'Time-Series Engineering',
-            description: 'Multi-resolution temporal alignment (15-min, hourly, weekly), point-in-time-correct feature joins, and time-aware cross-validation demonstrate the exact skills required for financial data, IoT, and operational analytics pipelines.',
+            icon: '🌤️',
+            title: 'API Integration & Resilience',
+            description: 'Live weather API integration with a four-level fallback chain demonstrates robust external dependency management — a core skill for production data systems.',
           },
           {
             icon: '📐',
-            title: 'Data Contracts & Governance',
-            description: 'Schema Registry enforcement at ingestion, Great Expectations validation suites, and formal YAML data contracts per upstream source reflect enterprise-grade data governance practices.',
+            title: 'Docker & Deployment',
+            description: 'Multi-stage Docker build with model baked in at CI time, pushed to GHCR, and deployed to Render. Demonstrates containerization and deployment pipeline skills.',
           },
           {
             icon: '🔄',
-            title: 'Production ML Operations',
-            description: 'MLflow model registry, DVC dataset versioning, promotion gates, and automated retraining DAGs demonstrate the ability to run ML systems reliably after deployment.',
+            title: 'CI/CD Pipeline Engineering',
+            description: 'GitHub Actions pipeline that trains, builds, pushes, and deploys on every push. Infrastructure-as-code for the entire ML lifecycle.',
           },
           {
-            icon: '☁️',
-            title: 'Cloud Infrastructure as Code',
-            description: 'Terraform-provisioned GKE/EKS clusters, Kubernetes namespaces per environment, Helm charts with HPA, and CI/CD pipeline integration reflect the IaC skills required for senior data engineering roles.',
+            icon: '📊',
+            title: 'Monitoring & Observability',
+            description: 'PSI-based drift detection with per-field warning badges, Prometheus metrics endpoint, and Grafana-ready monitoring. Production-grade observability on a free tier.',
           },
           {
-            icon: '📈',
-            title: 'Intelligent Monitoring',
-            description: 'The two-window drift detection design shows domain-aware thinking: knowing when not to retrain is as important as knowing when to. This goes well beyond standard MLOps tutorials.',
+            icon: '🗺️',
+            title: 'Interactive Visualization',
+            description: 'Leaflet.js map dashboard with 113 colour-coded fields shows the ability to build user-facing data products, not just backend APIs.',
           },
         ],
       },
     ],
-    techStack: ['Kafka', 'Spark', 'Feast', 'XGBoost', 'MLflow', 'FastAPI', 'Kubernetes', 'Prefect', 'Evidently AI'],
+    techStack: ['XGBoost', 'FastAPI', 'Docker', 'GitHub Actions', 'Leaflet.js', 'Redis', 'Prometheus', 'Open-Meteo API', 'Render'],
     images: [],
     videos: [],
-    link: 'https://github.com/hchand',
   },
   {
     id: 'real-time-financial-analytics',
