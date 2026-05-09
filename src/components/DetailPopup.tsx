@@ -334,6 +334,19 @@ export default function DetailPopup({ isOpen, onClose, title, sections, link }: 
             {section.items.map((card, i) => renderRecruiterCard(card, i))}
           </div>
         );
+      case 'videos':
+        return (
+          <div key={index} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '0.75rem', marginBottom: '1.5rem' }}>
+            {section.sources.map((src, i) => (
+              <video
+                key={i}
+                src={src}
+                controls
+                style={{ width: '100%', border: `1px solid ${borderColor}` }}
+              />
+            ))}
+          </div>
+        );
       default:
         return null;
     }

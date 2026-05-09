@@ -68,7 +68,10 @@ export default function BlogsPage() {
                 style={{ border: `1px solid ${borderColor}`, backgroundColor: bg }}
                 onClick={() => setSelectedBlog(blog)}
               >
-                <h2 className="text-base md:text-xl lg:text-2xl font-bold uppercase mb-2" style={{ color: text }}>{blog.title}</h2>
+                <h2 className="text-base md:text-xl lg:text-2xl font-bold uppercase mb-1" style={{ color: text }}>{blog.title}</h2>
+                {blog.subtitle && (
+                  <p className="text-xs md:text-sm" style={{ color: text, opacity: 0.6 }}>{blog.subtitle}</p>
+                )}
               </div>
             ))}
           </div>

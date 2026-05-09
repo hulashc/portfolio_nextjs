@@ -2,180 +2,281 @@
 
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useTheme } from './ThemeProvider';
+import { projects, Project } from '@/data/projects';
+import { blogs, Blog } from '@/data/blogs';
+import DetailPopup from './DetailPopup';
 
 interface CarouselItem {
   type: 'project' | 'blog';
+  id: string;
   title: string;
   tech: string;
-  link?: string;
+  data: Project | Blog;
 }
 
-const items: CarouselItem[] = [
-  { type: 'project', title: 'Real-Time Financial Analytics', tech: 'Kafka · Spark Streaming · AWS · PostgreSQL' },
-  { type: 'project', title: 'Generative AI Data Pipeline', tech: 'LLM APIs · RAG · Python · AWS Lambda' },
-  { type: 'blog', title: 'Building Scalable Data Pipelines', tech: 'Apache Spark · Airflow · Python' },
-  { type: 'blog', title: 'LLM Integration Patterns', tech: 'RAG · Vector Databases · Prompt Engineering' },
-];
+const PIXEL_SIZE = 16;
+const FILL_DURATION = 1000;
+const CLEAR_DURATION = 1200;
 
 export default function HeroAnimation() {
   const { isDark } = useTheme();
   const [current, setCurrent] = useState(0);
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchDelta, setTouchDelta] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
+  const [animating, setAnimating] = useState(false);
+  const [swipeX, setSwipeX] = useState(0);
+  const [isSwiping, setIsSwiping] = useState(false);
+  const [swipeDistance, setSwipeDistance] = useState(0);
+  const [selectedItem, setSelectedItem] = useState<Project | Blog | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const currentRef = useRef(current);
+  const animatingRef = useRef(false);
+  const swipeStartX = useRef(0);
+  const rafRef = useRef<number | null>(null);
+
+  currentRef.current = current;
+  animatingRef.current = animating;
+
+  const allItems = useMemo<CarouselItem[]>(() => [
+    ...projects.map(p => ({ type: 'project' as const, id: p.id, title: p.title, tech: p.techStack.slice(0, 3).join(' · '), data: p })),
+    ...blogs.map(b => ({ type: 'blog' as const, id: b.id, title: b.title, tech: b.subtitle || '', data: b })),
+  ], []);
 
   const borderColor = isDark ? 'rgba(255,255,240,0.7)' : 'rgba(0,0,0,0.6)';
   const heroBg = isDark ? '#161616' : '#DADADA';
   const textColor = isDark ? '#ffffff' : '#000000';
   const accentColor = isDark ? '#E3DACC' : '#333333';
 
-  const nextIndex = useMemo(() => (current + 1) % items.length, [current]);
-  const prevIndex = useMemo(() => (current - 1 + items.length) % items.length, [current]);
+  // Cleanup raf on unmount
+  useEffect(() => {
+    return () => {
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
+
+  const advanceToNextRef = useRef(() => {});
+  advanceToNextRef.current = () => {
+    transitionTo((currentRef.current + 1) % allItems.length);
+  };
 
   const resetTimer = useCallback(() => {
     if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
-      setCurrent((prev) => (prev + 1) % items.length);
+      if (!animatingRef.current) {
+        advanceToNextRef.current();
+      }
     }, 5000);
   }, []);
 
   useEffect(() => {
     resetTimer();
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
+    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
   }, [current, resetTimer]);
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.touches[0].clientX);
-    setIsDragging(true);
+  const easeIn = (t: number) => t * t * t;
+  const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
+
+  function buildGrid(w: number, h: number, ox: number, oy: number) {
+    const cols = Math.ceil(w / PIXEL_SIZE);
+    const rows = Math.ceil(h / PIXEL_SIZE);
+    const cells: { c: number; r: number; d: number; j: number }[] = [];
+    let maxDist = 0;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const d = Math.hypot(c + 0.5 - ox, r + 0.5 - oy);
+        if (d > maxDist) maxDist = d;
+        cells.push({ c, r, d, j: (Math.random() - 0.5) * 0.12 });
+      }
+    }
+    return { cells, maxDist };
+  }
+
+  const transitionTo = useCallback((targetIndex: number) => {
+    if (animatingRef.current || targetIndex === currentRef.current) return;
+    setAnimating(true);
+
+    const canvas = canvasRef.current;
+    const container = containerRef.current;
+    if (!canvas || !container) { setAnimating(false); return; }
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) { setAnimating(false); return; }
+
+    const rect = container.getBoundingClientRect();
+    const w = rect.width;
+    const h = rect.height;
+    canvas.width = w;
+    canvas.height = h;
+
+    const ox = (w / 2) / PIXEL_SIZE;
+    const oy = (h / 2) / PIXEL_SIZE;
+    const { cells, maxDist } = buildGrid(w, h, ox, oy);
+
+      const nonNullCtx = ctx;
+
+    const filled = new Uint8Array(cells.length);
+    const cleared = new Uint8Array(cells.length);
+
+    // Phase 1: Fill with heroBg from center (easeIn)
+    function doFill(startTime: number) {
+      return function frame(ts: number) {
+        const elapsed = ts - startTime;
+        const progress = Math.min(elapsed / FILL_DURATION, 1);
+        const waveFront = easeIn(progress) * maxDist * 1.15;
+        let allDone = true;
+
+        for (let i = 0; i < cells.length; i++) {
+          if (filled[i]) continue;
+          const cell = cells[i];
+          if (waveFront >= cell.d + cell.j * maxDist) {
+            nonNullCtx.fillStyle = textColor;
+            nonNullCtx.fillRect(cell.c * PIXEL_SIZE, cell.r * PIXEL_SIZE, PIXEL_SIZE + 1, PIXEL_SIZE + 1);
+            filled[i] = 1;
+          } else {
+            allDone = false;
+          }
+        }
+
+        if (!allDone) {
+          rafRef.current = requestAnimationFrame(frame);
+        } else {
+          // Swap card behind the solid canvas
+          setCurrent(targetIndex);
+          // Phase 2: Clear from center (easeOut)
+          rafRef.current = requestAnimationFrame(doClear(performance.now()));
+        }
+      };
+    }
+
+    // Phase 2: Clear pixels from center (easeOut)
+    function doClear(startTime: number) {
+      return function frame(ts: number) {
+        const elapsed = ts - startTime;
+        const progress = Math.min(elapsed / CLEAR_DURATION, 1);
+        const waveFront = easeOut(progress) * maxDist * 1.15;
+        let allDone = true;
+
+        for (let i = 0; i < cells.length; i++) {
+          if (cleared[i]) continue;
+          const cell = cells[i];
+          if (waveFront >= cell.d + cell.j * maxDist) {
+            nonNullCtx.clearRect(cell.c * PIXEL_SIZE, cell.r * PIXEL_SIZE, PIXEL_SIZE + 1, PIXEL_SIZE + 1);
+            cleared[i] = 1;
+          } else {
+            allDone = false;
+          }
+        }
+
+        if (!allDone) {
+          rafRef.current = requestAnimationFrame(frame);
+        } else {
+          setAnimating(false);
+        }
+      };
+    }
+
+    rafRef.current = requestAnimationFrame(doFill(performance.now()));
+
+    resetTimer();
+  }, [resetTimer, heroBg]);
+
+  const handlePrev = () => transitionTo((currentRef.current - 1 + allItems.length) % allItems.length);
+  const handleNext = () => transitionTo((currentRef.current + 1) % allItems.length);
+
+  const handlePointerDown = (clientX: number) => {
+    if (animating) return;
+    swipeStartX.current = clientX;
+    setIsSwiping(true);
+    setSwipeX(0);
+    setSwipeDistance(0);
     if (timerRef.current) clearTimeout(timerRef.current);
   };
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (touchStart === null) return;
-    const delta = e.touches[0].clientX - touchStart;
-    setTouchDelta(delta);
+  const handlePointerMove = (clientX: number) => {
+    if (!isSwiping || animating) return;
+    const delta = clientX - swipeStartX.current;
+    setSwipeX(delta);
+    setSwipeDistance(Math.abs(delta));
   };
 
-  const handleTouchEnd = () => {
-    if (touchDelta < -80) {
-      setCurrent((prev) => (prev + 1) % items.length);
-    } else if (touchDelta > 80) {
-      setCurrent((prev) => (prev - 1 + items.length) % items.length);
+  const handlePointerUp = () => {
+    if (!isSwiping) return;
+    setIsSwiping(false);
+    if (swipeDistance < 10) {
+      const item = allItems[currentRef.current];
+      setSelectedItem(item.data);
+    } else if (swipeX < -80) {
+      handleNext();
+    } else if (swipeX > 80) {
+      handlePrev();
     }
-    setTouchStart(null);
-    setTouchDelta(0);
-    setIsDragging(false);
+    setSwipeX(0);
+    setSwipeDistance(0);
     resetTimer();
   };
 
-  const goTo = (index: number) => {
-    setCurrent(index);
-    setTouchDelta(0);
+  const handlePointerCancel = () => {
+    if (!isSwiping) return;
+    setIsSwiping(false);
+    setSwipeX(0);
+    setSwipeDistance(0);
     resetTimer();
   };
 
-  const getItemStyle = (index: number) => {
-    const activeItem = current;
-    
-    if (index === activeItem) {
-      const progress = 1 - Math.abs(touchDelta) / 300;
-      return {
-        transform: `translateX(${-touchDelta}px) scale(${0.9 + progress * 0.1})`,
-        opacity: progress,
-        zIndex: 3,
-      };
-    }
-
-    if (index === nextIndex && touchDelta < 0) {
-      const slideProgress = Math.max(0, -touchDelta / 200);
-      return {
-        transform: `translateX(${200 + touchDelta}px) scale(${0.8 + slideProgress * 0.2})`,
-        opacity: slideProgress,
-        zIndex: 2,
-      };
-    }
-
-    if (index === prevIndex && touchDelta > 0) {
-      const slideProgress = Math.max(0, touchDelta / 200);
-      return {
-        transform: `translateX(${-200 + touchDelta}px) scale(${0.8 + slideProgress * 0.2})`,
-        opacity: slideProgress,
-        zIndex: 2,
-      };
-    }
-
-    return {
-      transform: 'translateX(0) scale(0.8)',
-      opacity: 0,
-      zIndex: 1,
-    };
-  };
+  const item = allItems[current];
 
   return (
-    <div
-      style={{
-        height: '50vh',
-        background: heroBg,
-        borderBottom: `1px solid ${borderColor}`,
-        borderLeft: `1px solid ${borderColor}`,
-        borderRight: `1px solid ${borderColor}`,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative',
-        overflow: 'hidden',
-        touchAction: 'pan-y',
-      }}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-      onMouseDown={(e) => {
-        setTouchStart(e.clientX);
-        setIsDragging(true);
-        if (timerRef.current) clearTimeout(timerRef.current);
-      }}
-      onMouseMove={(e) => {
-        if (touchStart === null) return;
-        setTouchDelta(e.clientX - touchStart);
-      }}
-      onMouseUp={(e) => {
-        if (touchStart === null) return;
-        const delta = e.clientX - touchStart;
-        if (delta < -80) {
-          setCurrent((prev) => (prev + 1) % items.length);
-        } else if (delta > 80) {
-          setCurrent((prev) => (prev - 1 + items.length) % items.length);
-        }
-        setTouchStart(null);
-        setTouchDelta(0);
-        setIsDragging(false);
-        resetTimer();
-      }}
-      onMouseLeave={() => {
-        setTouchStart(null);
-        setTouchDelta(0);
-        setIsDragging(false);
-        resetTimer();
-      }}
-    >
-      {items.map((item, index) => (
+    <>
+      <div
+        ref={containerRef}
+        style={{
+          height: '50vh',
+          background: heroBg,
+          borderBottom: `1px solid ${borderColor}`,
+          borderLeft: `1px solid ${borderColor}`,
+          borderRight: `1px solid ${borderColor}`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+          overflow: 'hidden',
+          touchAction: 'pan-y',
+          userSelect: 'none',
+        }}
+        onTouchStart={(e) => handlePointerDown(e.touches[0].clientX)}
+        onTouchMove={(e) => handlePointerMove(e.touches[0].clientX)}
+        onTouchEnd={handlePointerUp}
+        onTouchCancel={handlePointerCancel}
+        onMouseDown={(e) => handlePointerDown(e.clientX)}
+        onMouseMove={(e) => handlePointerMove(e.clientX)}
+        onMouseUp={handlePointerUp}
+        onMouseLeave={handlePointerCancel}
+      >
         <div
-          key={index}
           style={{
-            position: 'absolute',
-            width: '100%',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            transition: isDragging ? 'none' : 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s ease',
-            pointerEvents: index === current ? 'auto' : 'none',
-            ...getItemStyle(index),
+            transform: isSwiping ? `translateX(${swipeX}px)` : 'translateX(0)',
+            transition: isSwiping ? 'none' : 'transform 0.3s ease',
+            position: 'relative',
+            zIndex: 2,
+            pointerEvents: animating ? 'none' : 'auto',
           }}
         >
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              cursor: 'pointer',
+            }}
+            onClick={() => {
+              const i = allItems[currentRef.current];
+              setSelectedItem(i.data);
+            }}
+          >
           <div
             style={{
               color: textColor,
@@ -210,69 +311,68 @@ export default function HeroAnimation() {
           >
             {item.tech}
           </p>
+          </div>
         </div>
-      ))}
 
-      <div style={{ display: 'flex', gap: '0.5rem', position: 'absolute', bottom: '2rem', zIndex: 10 }}>
-        {items.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => goTo(i)}
-            aria-label={`Go to slide ${i + 1}`}
-            style={{
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              background: i === current ? textColor : 'transparent',
-              border: `1px solid ${textColor}`,
-              cursor: 'pointer',
-              padding: 0,
-              transition: 'background 0.3s ease',
-            }}
-          />
-        ))}
+        <canvas
+          ref={canvasRef}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            zIndex: 3,
+            pointerEvents: 'none',
+          }}
+        />
+
+        <button
+          onClick={handlePrev}
+          onMouseDown={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
+          style={{
+            position: 'absolute',
+            left: '1rem',
+            background: 'none',
+            border: 'none',
+            color: textColor,
+            fontSize: '2rem',
+            cursor: animating ? 'default' : 'pointer',
+            opacity: 0.5,
+            zIndex: 10,
+          }}
+          aria-label="Previous"
+        >
+          ‹
+        </button>
+        <button
+          onClick={handleNext}
+          onMouseDown={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
+          style={{
+            position: 'absolute',
+            right: '1rem',
+            background: 'none',
+            border: 'none',
+            color: textColor,
+            fontSize: '2rem',
+            cursor: animating ? 'default' : 'pointer',
+            opacity: 0.5,
+            zIndex: 10,
+          }}
+          aria-label="Next"
+        >
+          ›
+        </button>
       </div>
 
-      <button
-        onClick={() => {
-          setCurrent((prev) => (prev - 1 + items.length) % items.length);
-          resetTimer();
-        }}
-        style={{
-          position: 'absolute',
-          left: '1rem',
-          background: 'none',
-          border: 'none',
-          color: textColor,
-          fontSize: '2rem',
-          cursor: 'pointer',
-          opacity: 0.5,
-          zIndex: 10,
-        }}
-        aria-label="Previous"
-      >
-        ‹
-      </button>
-      <button
-        onClick={() => {
-          setCurrent((prev) => (prev + 1) % items.length);
-          resetTimer();
-        }}
-        style={{
-          position: 'absolute',
-          right: '1rem',
-          background: 'none',
-          border: 'none',
-          color: textColor,
-          fontSize: '2rem',
-          cursor: 'pointer',
-          opacity: 0.5,
-          zIndex: 10,
-        }}
-        aria-label="Next"
-      >
-        ›
-      </button>
-    </div>
+      <DetailPopup
+        isOpen={selectedItem !== null}
+        onClose={() => setSelectedItem(null)}
+        title={selectedItem?.title || ''}
+        sections={selectedItem?.sections || []}
+        link={selectedItem?.link}
+      />
+    </>
   );
 }

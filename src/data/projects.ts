@@ -52,7 +52,8 @@ export type SectionType =
   | { type: 'phases'; items: Phase[] }
   | { type: 'decisions'; items: Decision[] }
   | { type: 'cost'; sections: CostSection[] }
-  | { type: 'recruiter-cards'; items: RecruiterCard[] };
+  | { type: 'recruiter-cards'; items: RecruiterCard[] }
+  | { type: 'videos'; sources: string[] };
 
 export interface Project {
   id: string;
@@ -351,6 +352,345 @@ Fallback chain: Redis cache → Live API → In-memory cache → UK seasonal def
     techStack: ['XGBoost', 'FastAPI', 'Docker', 'GitHub Actions', 'Leaflet.js', 'Redis', 'Prometheus', 'Open-Meteo API', 'Render'],
     images: [],
     videos: [],
+  },
+  {
+    id: 'leet-journey',
+    title: 'Leet Journey',
+    link: 'https://notes.hulash.com',
+    sections: [
+      {
+        type: 'hero',
+        subtitle: 'My LeetCode problem-solving journey. Notes on patterns, approaches, and solutions — written as I learn, not after I already know.',
+      },
+      {
+        type: 'text',
+        content: `This is a living collection of my LeetCode notes — not polished tutorials, but honest documentation of how I think through problems. Each note covers the approach, the pattern it belongs to, and where I got stuck. It's built in Obsidian and published at the link below.`,
+      },
+    ],
+    techStack: ['Obsidian', 'LeetCode', 'Data Structures', 'Algorithms', 'Patterns'],
+    images: [],
+    videos: [],
+  },
+  {
+    id: 'bird-song-mathematical-model',
+    title: 'Bird Song Mathematical Model',
+    sections: [
+      {
+        type: 'hero',
+        subtitle: 'A 3D visualisation of birdsong using machine learning — extracting 57 audio features per frame, reducing to 3 PCA components, and rendering as an interactive Three.js comet-trail animation synced to audio.',
+      },
+      {
+        type: 'section',
+        title: 'What I Built',
+      },
+      {
+        type: 'text',
+        content: `A Python audio processing pipeline (librosa + scikit-learn) to extract, scale, and reduce audio features to 3D
+A Three.js web app with a live comet-trail animation, orbit controls, and audio sync
+A binary search for frame-to-time mapping for smooth real-time playback`,
+      },
+      {
+        type: 'videos',
+        sources: ['/videos/birdsong1.mp4', '/videos/birdsong2.mp4'],
+      },
+      {
+        type: 'section',
+        title: 'Tech Stack',
+      },
+      {
+        type: 'text',
+        content: `Technology — Role
+Python — Core language
+librosa — Audio feature extraction
+scikit-learn (PCA) — Dimensionality reduction
+NumPy — Numerical computing
+Three.js — 3D rendering
+WebGL — Graphics
+ES Modules — JavaScript modules`,
+      },
+      {
+        type: 'section',
+        title: 'Skills Demonstrated',
+      },
+      {
+        type: 'skill-badges',
+        items: [
+          { text: 'Machine Learning', highlight: true },
+          { text: 'Audio DSP', highlight: true },
+          { text: 'Data Visualisation', highlight: true },
+          { text: '3D Graphics', highlight: true },
+          { text: 'Python Pipeline Design', highlight: true },
+          { text: 'Three.js' },
+          { text: 'PCA' },
+          { text: 'librosa' },
+        ],
+      },
+      {
+        type: 'section',
+        title: 'Why This Project Matters',
+      },
+      {
+        type: 'text',
+        content: `The Three.js + PCA combination is a strong differentiator — it shows you can bridge the ML pipeline and the frontend output end-to-end.
+
+This project demonstrates the ability to take raw audio data, apply machine learning techniques for dimensionality reduction, and create an engaging visual experience that brings the data to life.`,
+      },
+    ],
+    techStack: ['Python', 'librosa', 'scikit-learn', 'PCA', 'NumPy', 'Three.js', 'WebGL'],
+    images: [],
+    videos: ['/videos/birdsong1.mp4', '/videos/birdsong2.mp4'],
+  },
+  {
+    id: 'real-time-fraud-detection',
+    title: 'Real-Time Fraud Detection Pipeline',
+    sections: [
+      {
+        type: 'hero',
+        subtitle: 'A streaming fraud detection system that processes financial transactions in real time using Apache Kafka, applies rule-based detection, and visualises everything on an interactive live dashboard built with Streamlit and Plotly.',
+      },
+      {
+        type: 'skill-badges',
+        items: [
+          { text: 'Python', highlight: true },
+          { text: 'Apache Kafka', highlight: true },
+          { text: 'Docker', highlight: true },
+          { text: 'Streamlit', highlight: true },
+          { text: 'Plotly' },
+          { text: 'Pandas' },
+          { text: 'KRaft Mode' },
+        ],
+      },
+      {
+        type: 'section',
+        title: 'System Architecture',
+      },
+      {
+        type: 'architecture-cards',
+        items: [
+          {
+            icon: '⚡',
+            title: 'Producer',
+            description: 'Python script generates realistic financial transactions — 8% intentionally suspicious.',
+            stack: ['Python'],
+            color: '#e07a3a',
+          },
+          {
+            icon: '📦',
+            title: 'Kafka',
+            description: 'Apache Kafka 3.8 in KRaft consensus mode via Docker — no Zookeeper, faster startup.',
+            stack: ['Kafka', 'KRaft', 'Docker'],
+            color: '#a86fdf',
+          },
+          {
+            icon: '🔍',
+            title: 'Consumer',
+            description: 'Reads the stream, applies multi-signal fraud rules, and flags risky activity.',
+            stack: ['Python', 'Pandas'],
+            color: '#4eaa78',
+          },
+          {
+            icon: '📄',
+            title: 'CSV Store',
+            description: 'Results are persisted to CSV for dashboard consumption and historical analysis.',
+            stack: ['CSV', 'Pandas'],
+            color: '#6ba3e0',
+          },
+          {
+            icon: '🌐',
+            title: 'Dashboard',
+            description: 'Streamlit-powered live dashboard that auto-refreshes every 2 seconds with Plotly charts.',
+            stack: ['Streamlit', 'Plotly'],
+            color: '#dd6974',
+          },
+        ],
+      },
+      {
+        type: 'section',
+        title: 'How It Works',
+        content: 'From stream to insight in milliseconds',
+      },
+      {
+        type: 'text',
+        content: `The pipeline starts with a producer generating realistic financial transactions — 8% are intentionally suspicious. Each transaction flows through Apache Kafka running in KRaft mode (no Zookeeper), where a consumer reads the stream, applies multi-signal fraud rules, and flags risky activity. Results are persisted to a CSV and visualised on a live Streamlit dashboard that auto-refreshes every 2 seconds.`,
+      },
+      {
+        type: 'section',
+        title: 'Key Features',
+      },
+      {
+        type: 'text',
+        content: `⚡ Real-Time Streaming — Transactions are generated and consumed in real time via Apache Kafka. No batch processing — every transaction is analysed as it arrives.
+🔎 Rule-Based Detection — Multi-signal fraud detection using transaction amount, time of day, and geographic location. Flags trigger when 2+ rules fire simultaneously.
+🎨 Interactive Dashboard — Streamlit-powered dashboard with risk gauges, heatmaps, sunburst charts, and live transaction feeds — all auto-refreshing.
+📦 KRaft-Mode Kafka — Runs Apache Kafka 3.8 in KRaft consensus mode via Docker — no Zookeeper dependency, faster startup, simpler architecture.
+🔧 One-Click Deploy — Start and stop the entire stack with batch scripts. Four components spin up in separate windows automatically.
+📊 Rich Visualisations — Plotly-powered charts including spline timelines, fraud heatmaps, sunburst breakdowns, overlapping histograms, and horizontal risk rankings.`,
+      },
+      {
+        type: 'section',
+        title: 'Detection Logic',
+        content: 'How fraud is identified — a transaction is flagged when it triggers two or more rules simultaneously.',
+      },
+      {
+        type: 'decisions',
+        items: [
+          {
+            num: '01',
+            badge: 'Rule',
+            title: 'High Amount > $4,000',
+            description: 'Unusually large transactions are a common fraud indicator. Flags any single transaction exceeding the $4,000 threshold.',
+          },
+          {
+            num: '02',
+            badge: 'Rule',
+            title: 'Unusual Hour (11 PM – 6 AM)',
+            description: 'Transactions outside standard business hours carry higher risk. This rule captures activity during low-oversight windows.',
+          },
+          {
+            num: '03',
+            badge: 'Rule',
+            title: 'Risky Location',
+            description: 'Transactions originating from Lagos, Moscow, or Unknown locations — regions with elevated fraud patterns in the dataset.',
+          },
+        ],
+      },
+      {
+        type: 'section',
+        title: 'Dashboard Preview',
+        content: 'The Streamlit dashboard auto-refreshes every 2 seconds with real-time metrics, interactive charts, and fraud alerts.',
+      },
+      {
+        type: 'stats',
+        items: [
+          { num: '342', label: 'Transactions Monitored' },
+          { num: '23', label: 'Fraud Detected' },
+          { num: '6.8%', label: 'Fraud Rate' },
+          { num: '$284K', label: 'Total Volume' },
+          { num: '$831', label: 'Avg Transaction' },
+        ],
+      },
+      {
+        type: 'text',
+        content: `⚠️ HIGH ALERT — 6.8% fraud rate detected across 342 transactions
+
+Transaction Stream — ● Legitimate ● Fraudulent
+
+Fraud Heatmap by Hour & Location — Lagos, Moscow, Unknown locations show concentrated fraud patterns across late-night and early-morning hours.
+
+Top Risky Users:
+USER-2847 — $18,400
+USER-1193 — $14,250
+USER-5521 — $11,800
+USER-3390 — $8,600
+USER-7762 — $5,300
+
+Recent Fraud Alerts:
+● Critical — TXN-482931 | USER-2847 | $12,450 | transfer | Lagos | high_amount, unusual_hour, risky_location
+● High — TXN-330185 | USER-1193 | $8,200 | withdrawal | Moscow | high_amount, risky_location
+● High — TXN-771204 | USER-5521 | $6,750 | purchase | Unknown | high_amount, risky_location`,
+      },
+    ],
+    techStack: ['Python', 'Apache Kafka', 'Docker', 'Streamlit', 'Plotly', 'Pandas', 'KRaft'],
+    images: [],
+    videos: [],
+  },
+  {
+    id: 'ar-gesture-menu',
+    title: 'AR Gesture-Controlled Menu System',
+    sections: [
+      {
+        type: 'hero',
+        subtitle: 'Touchless control. No hardware. Just a hand and a camera. A real-time AR interface for touchless human-computer interaction — hand tracking, gesture recognition, and Jarvis-style menu navigation.',
+      },
+      {
+        type: 'videos',
+        sources: ['/videos/argestures.mp4'],
+      },
+      {
+        type: 'section',
+        title: 'The Question',
+      },
+      {
+        type: 'text',
+        content: `What would it take to control a system using only gestures, with nothing but a standard webcam? No depth sensors. No specialised gloves. No expensive AR headset. Just Python, a camera, and the right libraries. This project was my attempt to answer that.`,
+      },
+      {
+        type: 'section',
+        title: 'What It Does',
+      },
+      {
+        type: 'text',
+        content: `ARGestures is a real-time, hand gesture-controlled system that uses a webcam feed to track hand landmarks and translate distinct poses into system-level controls. An AR-style overlay renders directly onto the live camera feed, giving the user visual feedback as they interact.
+
+The system is composed of several modular components:
+
+hand_tracking.py — Interfaces with MediaPipe's Hand Landmarker model to detect and stream 21 hand landmarks per frame in real time
+gesture_engine.py — Classifies those landmarks into recognised gestures using geometric and positional logic
+ui_renderer.py — Renders the AR overlay and interactive UI elements directly onto the OpenCV camera feed
+touch_engine.py — Simulates pointer and click interactions, bridging gesture recognition to actual system events
+menu_state.py — A state machine that manages navigation through gesture-driven menus
+config.py — Centralised configuration for confidence thresholds, camera index, and gesture sensitivity`,
+      },
+      {
+        type: 'section',
+        title: 'How It Was Built',
+      },
+      {
+        type: 'text',
+        content: `The foundation is MediaPipe's Hand Landmarker model, which returns a normalised set of 21 3D coordinates per hand on every frame — fingertips, knuckles, wrist, all of it. The challenge was not detecting hands; MediaPipe handles that elegantly. The challenge was interpreting meaning from those coordinates.
+
+The gesture engine analyses the spatial relationships between landmarks — angles between joints, whether fingers are extended or curled, relative distances between fingertip positions — and maps those geometries to classified gestures. From there, the touch engine translates the recognised gesture into an OS-level event, simulating a click or cursor movement. The whole loop runs frame-by-frame through OpenCV, with the UI renderer drawing overlays directly onto the captured image before display.
+
+The result is a system where the user sees their own hand on screen, surrounded by a responsive AR interface that reacts in real time.`,
+      },
+      {
+        type: 'section',
+        title: 'The Difficulties',
+      },
+      {
+        type: 'text',
+        content: `This was not a smooth build. Several problems surfaced that required real engineering patience.
+
+Gesture ambiguity was the most persistent. Human hands are expressive and inconsistent — a relaxed open palm looks different under harsh lighting than in a dimly lit room, and the same gesture from two people can have meaningfully different landmark geometry. Tuning the confidence thresholds in config.py and building robust classification logic in the gesture engine took multiple iterations of testing and refinement.
+
+Latency was another constraint. Computer vision pipelines are inherently expensive. Keeping the frame loop responsive enough to feel interactive meant being deliberate about processing order — hand detection, gesture classification, UI rendering, and touch simulation all had to be structured so no single step could block the others unnecessarily.
+
+Camera compatibility proved more annoying than expected. Not all webcams expose themselves on the same device index, and on some systems the default index simply does not work. This is why find_camera.py exists — a small utility that probes available camera devices and returns what is actually accessible, so users can update config.py accordingly before running the main system.
+
+The AR overlay required careful thought about coordinate space. MediaPipe returns normalised coordinates (0.0 to 1.0), but OpenCV works in pixel space. Every landmark, every rendered UI element, every interactive region had to be mapped correctly between these two systems — and when the camera resolution changes, everything has to scale cleanly with it.`,
+      },
+      {
+        type: 'section',
+        title: 'The Stack',
+      },
+      {
+        type: 'skill-badges',
+        items: [
+          { text: 'Python', highlight: true },
+          { text: 'MediaPipe', highlight: true },
+          { text: 'OpenCV', highlight: true },
+          { text: 'Computer Vision', highlight: true },
+          { text: 'NumPy' },
+          { text: 'AR Overlay' },
+          { text: 'Gesture Recognition' },
+        ],
+      },
+      {
+        type: 'section',
+        title: 'Reflections',
+      },
+      {
+        type: 'text',
+        content: `What I found most rewarding about this project was not the technical execution — it was the moment the system worked and I waved my hand to trigger an action without touching a single key. There is something genuinely arresting about that. It stops feeling like code and starts feeling like the future.
+
+It also taught me something important about the difference between detection and understanding. Detecting a hand is a solved problem in 2025. Making a machine understand what a hand means in a given moment — that is still an open, fascinating frontier. This project sits right at that edge, and I would not have learned that without building it.
+
+The full source is available on GitHub.`,
+      },
+    ],
+    techStack: ['Python', 'MediaPipe', 'OpenCV', 'NumPy', 'Computer Vision', 'AR'],
+    images: [],
+    videos: ['/videos/argestures.mp4'],
   },
   {
     id: 'real-time-financial-analytics',
