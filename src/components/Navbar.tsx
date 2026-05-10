@@ -182,13 +182,15 @@ export function Navbar() {
         <div style={{ border: `1px solid ${borderColor}` }} className="p-8">
           <h3 className="text-2xl md:text-3xl font-bold uppercase mb-6 pb-2" style={{ color: text, borderBottom: `2px solid ${borderColor}` }}>Certifications</h3>
           <div className="grid grid-cols-2 gap-4">
-            <p className="text-sm md:text-base" style={{ color: text }}>AWS Certified Data Engineer – Associate | Amazon Web Services, 2024</p>
-            <p className="text-sm md:text-base" style={{ color: text }}>AWS Certified Developer – Associate | Amazon Web Services, 2023</p>
-            <p className="text-sm md:text-base" style={{ color: text }}>AWS Certified Cloud Practitioner | Amazon Web Services, 2023</p>
-            <p className="text-sm md:text-base" style={{ color: text }}>Tableau Certified Data Analyst | Tableau Software, 2023</p>
-            <p className="text-sm md:text-base" style={{ color: text }}>MongoDB Certified Developer | MongoDB University, 2023</p>
-            <p className="text-sm md:text-base" style={{ color: text }}>Microsoft Certified: Azure Fundamentals (AZ-900) | Microsoft, 2023</p>
-            <p className="text-sm md:text-base" style={{ color: text }}>GDPR Data Protection & Privacy | Independent Certification, 2023</p>
+            <p className="text-sm md:text-base" style={{ color: text }}>AWS Certified Data Engineer – Associate</p>
+            <p className="text-sm md:text-base" style={{ color: text }}>AWS Certified Developer – Associate</p>
+            <p className="text-sm md:text-base" style={{ color: text }}>AWS Certified Cloud Practitioner</p>
+            <p className="text-sm md:text-base" style={{ color: text }}>Microsoft Certified: Azure Fundamentals (AZ-900)</p>
+            <p className="text-sm md:text-base" style={{ color: text }}>Anthropic - Model Context Protocol: Advanced Topics</p>
+            <p className="text-sm md:text-base" style={{ color: text }}>DataBricks - Fundamentals</p>
+            <p className="text-sm md:text-base" style={{ color: text }}>Tableau Certified Data Analyst</p>
+            <p className="text-sm md:text-base" style={{ color: text }}>MongoDB Certified Developer</p>
+            <p className="text-sm md:text-base" style={{ color: text }}>UK GDPR Practitioner Certificate — Online</p>
           </div>
         </div>
         <div style={{ border: `1px solid ${borderColor}` }} className="p-8">
@@ -206,9 +208,18 @@ export function Navbar() {
               <p className="text-sm md:text-base font-semibold" style={{ color: text }}>Hyderabad Literature Festival — Tech & Partnerships Volunteer</p>
               <p className="text-xs md:text-sm opacity-70" style={{ color: text }}>Website operations, sponsor communication, guest coordination</p>
             </div>
-            <p className="text-sm md:text-base" style={{ color: text }}>Data for Good · Volunteer</p>
-            <p className="text-sm md:text-base" style={{ color: text }}>Open Source · Contributor</p>
-            <p className="text-sm md:text-base" style={{ color: text }}>Tech Meetups · Co-organiser</p>
+            <div>
+              <p className="text-sm md:text-base font-semibold" style={{ color: text }}>Data for Good · Volunteer</p>
+              <p className="text-xs md:text-sm opacity-70" style={{ color: text }}>Data initiatives, nonprofit collaboration, analytics support</p>
+            </div>
+            <div>
+              <p className="text-sm md:text-base font-semibold" style={{ color: text }}>Open Source · Contributor</p>
+              <p className="text-xs md:text-sm opacity-70" style={{ color: text }}>Code contributions, documentation support, community collaboration</p>
+            </div>
+            <div>
+              <p className="text-sm md:text-base font-semibold" style={{ color: text }}>Tech Meetups · Co-organiser</p>
+              <p className="text-xs md:text-sm opacity-70" style={{ color: text }}>Event planning, speaker coordination, community engagement</p>
+            </div>
           </div>
         </div>
         <div style={{ borderBottom: `1px solid ${borderColor}`, borderLeft: `1px solid ${borderColor}`, borderRight: `1px solid ${borderColor}` }} className="p-4">

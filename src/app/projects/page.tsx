@@ -5,6 +5,7 @@ import { useTheme } from "@/components/ThemeProvider";
 import { useState } from "react";
 import { projects, Project } from "@/data/projects";
 import DetailPopup from "@/components/DetailPopup";
+import PixelReveal from "@/components/PixelReveal";
 
 export default function ProjectsPage() {
   const { isDark, toggleDark } = useTheme();
@@ -61,16 +62,17 @@ export default function ProjectsPage() {
         <div className="p-4 md:p-6" style={{ border: `1px solid ${borderColor}`, minHeight: "calc(90vh - 10vh)", marginTop: "-2px" }}>
           <h1 className="text-2xl md:text-4xl lg:text-6xl font-bold uppercase mb-4 md:mb-8" style={{ color: text }}>Projects</h1>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4" style={{ backgroundColor: bg }}>
-            {projects.map((project) => (
-              <div
-                key={project.id}
-                className="p-3 md:p-4 cursor-pointer"
-                style={{ border: `1px solid ${borderColor}`, backgroundColor: bg }}
-                onClick={() => setSelectedProject(project)}
-              >
-                <h2 className="text-base md:text-xl lg:text-2xl font-bold uppercase mb-2" style={{ color: text }}>{project.title}</h2>
-                <p className="text-xs md:text-sm" style={{ color: text, opacity: 0.6 }}>{project.techStack.slice(0, 4).join(' · ')}{project.techStack.length > 4 ? '...' : ''}</p>
-              </div>
+            {projects.map((project, index) => (
+              <PixelReveal key={project.id} bgColor={bg} textColor={text} delay={index * 200}>
+                <div
+                  className="p-3 md:p-4 cursor-pointer"
+                  style={{ border: `1px solid ${borderColor}`, backgroundColor: bg }}
+                  onClick={() => setSelectedProject(project)}
+                >
+                  <h2 className="text-base md:text-xl lg:text-2xl font-bold uppercase mb-2" style={{ color: text }}>{project.title}</h2>
+                  <p className="text-xs md:text-sm" style={{ color: text, opacity: 0.6 }}>{project.techStack.slice(0, 4).join(' · ')}{project.techStack.length > 4 ? '...' : ''}</p>
+                </div>
+              </PixelReveal>
             ))}
           </div>
         </div>
