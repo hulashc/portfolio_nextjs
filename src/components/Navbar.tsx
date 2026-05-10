@@ -166,17 +166,49 @@ export function Navbar() {
             </div>
           </div>
         </div>
-        <div style={{ border: `1px solid ${borderColor}` }} className="p-4">
-          <h3 className="text-2xl md:text-3xl font-bold uppercase mb-4 pb-2" style={{ color: text, borderBottom: `2px solid ${borderColor}` }}>Skills</h3>
-          <div className="grid grid-cols-2 gap-2">
-            <p className="text-xs md:text-sm" style={{ color: text }}>Python · SQL · PySpark</p>
-            <p className="text-xs md:text-sm" style={{ color: text }}>Spark · Kafka · Airflow</p>
-            <p className="text-xs md:text-sm" style={{ color: text }}>AWS · Azure · GCP</p>
-            <p className="text-xs md:text-sm" style={{ color: text }}>LLM · RAG · LangChain</p>
-            <p className="text-xs md:text-sm" style={{ color: text }}>dbt · Snowflake · Delta</p>
-            <p className="text-xs md:text-sm" style={{ color: text }}>Terraform · Docker · K8s</p>
-            <p className="text-xs md:text-sm" style={{ color: text }}>MLflow · Vertex AI</p>
-            <p className="text-xs md:text-sm" style={{ color: text }}>Git · DAGs · CI/CD</p>
+        <div style={{ border: `1px solid ${borderColor}` }} className="p-8">
+          <h3 className="text-2xl md:text-3xl font-bold uppercase mb-6 pb-2" style={{ color: text, borderBottom: `2px solid ${borderColor}` }}>Skills</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <p className="text-sm md:text-base" style={{ color: text }}>Python · SQL · PySpark</p>
+            <p className="text-sm md:text-base" style={{ color: text }}>Spark · Kafka · Airflow</p>
+            <p className="text-sm md:text-base" style={{ color: text }}>AWS · Azure · GCP</p>
+            <p className="text-sm md:text-base" style={{ color: text }}>LLM · RAG · LangChain</p>
+            <p className="text-sm md:text-base" style={{ color: text }}>dbt · Snowflake · Delta</p>
+            <p className="text-sm md:text-base" style={{ color: text }}>Terraform · Docker · K8s</p>
+            <p className="text-sm md:text-base" style={{ color: text }}>MLflow · Vertex AI</p>
+            <p className="text-sm md:text-base" style={{ color: text }}>Git · DAGs · CI/CD</p>
+          </div>
+        </div>
+        <div style={{ border: `1px solid ${borderColor}` }} className="p-8">
+          <h3 className="text-2xl md:text-3xl font-bold uppercase mb-6 pb-2" style={{ color: text, borderBottom: `2px solid ${borderColor}` }}>Certifications</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <p className="text-sm md:text-base" style={{ color: text }}>AWS Certified Data Engineer – Associate | Amazon Web Services, 2024</p>
+            <p className="text-sm md:text-base" style={{ color: text }}>AWS Certified Developer – Associate | Amazon Web Services, 2023</p>
+            <p className="text-sm md:text-base" style={{ color: text }}>AWS Certified Cloud Practitioner | Amazon Web Services, 2023</p>
+            <p className="text-sm md:text-base" style={{ color: text }}>Tableau Certified Data Analyst | Tableau Software, 2023</p>
+            <p className="text-sm md:text-base" style={{ color: text }}>MongoDB Certified Developer | MongoDB University, 2023</p>
+            <p className="text-sm md:text-base" style={{ color: text }}>Microsoft Certified: Azure Fundamentals (AZ-900) | Microsoft, 2023</p>
+            <p className="text-sm md:text-base" style={{ color: text }}>GDPR Data Protection & Privacy | Independent Certification, 2023</p>
+          </div>
+        </div>
+        <div style={{ border: `1px solid ${borderColor}` }} className="p-8">
+          <h3 className="text-2xl md:text-3xl font-bold uppercase mb-6 pb-2" style={{ color: text, borderBottom: `2px solid ${borderColor}` }}>Volunteering</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <p className="text-sm md:text-base font-semibold" style={{ color: text }}>Rotary International — Tech & Digital Support</p>
+              <p className="text-xs md:text-sm opacity-70" style={{ color: text }}>Website management, event coordination, partnership communication</p>
+            </div>
+            <div>
+              <p className="text-sm md:text-base font-semibold" style={{ color: text }}>Art Fund — Digital Outreach Volunteer</p>
+              <p className="text-xs md:text-sm opacity-70" style={{ color: text }}>Online engagement, collaboration support, campaign coordination</p>
+            </div>
+            <div>
+              <p className="text-sm md:text-base font-semibold" style={{ color: text }}>Hyderabad Literature Festival — Tech & Partnerships Volunteer</p>
+              <p className="text-xs md:text-sm opacity-70" style={{ color: text }}>Website operations, sponsor communication, guest coordination</p>
+            </div>
+            <p className="text-sm md:text-base" style={{ color: text }}>Data for Good · Volunteer</p>
+            <p className="text-sm md:text-base" style={{ color: text }}>Open Source · Contributor</p>
+            <p className="text-sm md:text-base" style={{ color: text }}>Tech Meetups · Co-organiser</p>
           </div>
         </div>
         <div style={{ borderBottom: `1px solid ${borderColor}`, borderLeft: `1px solid ${borderColor}`, borderRight: `1px solid ${borderColor}` }} className="p-4">
