@@ -40,13 +40,13 @@ export function MainNav() {
         <div className="flex items-center justify-center px-1 sm:px-2 md:px-4 overflow-hidden" style={{ borderRight: `1px solid ${borderColor}` }}>
           <span className="text-center" style={{ color: text }}>
             <span className="block sm:hidden text-lg sm:text-xl md:text-2xl lg:text-4xl font-bold tracking-wide uppercase whitespace-nowrap">
-              <ScrambleText text="Donempudi" style={{ color: text }} onClick />
+              <ScrambleText text="Donempudi" style={{ color: text }} />
             </span>
             <span className="block sm:hidden text-lg sm:text-xl md:text-2xl lg:text-4xl font-bold tracking-wide uppercase whitespace-nowrap">
-              <ScrambleText text="Hulash Chand" style={{ color: text }} onClick />
+              <ScrambleText text="Hulash Chand" style={{ color: text }} />
             </span>
             <span className="hidden sm:block text-sm sm:text-base md:text-3xl lg:text-6xl font-bold tracking-wider md:tracking-widest uppercase whitespace-nowrap">
-              <ScrambleText text="Donempudi Hulash Chand" style={{ color: text }} onClick />
+              <ScrambleText text="Donempudi Hulash Chand" style={{ color: text }} />
             </span>
           </span>
         </div>

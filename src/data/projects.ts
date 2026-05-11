@@ -53,7 +53,8 @@ export type SectionType =
   | { type: 'decisions'; items: Decision[] }
   | { type: 'cost'; sections: CostSection[] }
   | { type: 'recruiter-cards'; items: RecruiterCard[] }
-  | { type: 'videos'; sources: string[] };
+  | { type: 'videos'; sources: string[] }
+  | { type: 'embed'; url: string; height?: string };
 
 export interface Project {
   id: string;
@@ -364,10 +365,14 @@ Fallback chain: Redis cache → Live API → In-memory cache → UK seasonal def
       },
       {
         type: 'text',
-        content: `This is a living collection of my LeetCode notes — not polished tutorials, but honest documentation of how I think through problems. Each note covers the approach, the pattern it belongs to, and where I got stuck. It's built in Obsidian and published at the link below.`,
+        content: `This is a living collection of my LeetCode notes — not polished tutorials, but honest documentation of how I think through problems. Each note captures the problem-solving process: the approach I tried, the underlying pattern, optimizations, mistakes, and where I got stuck before arriving at a solution. The goal is to build deeper intuition for data structures and algorithms through consistent practice and reflection.
+
+The project is built using <a href="https://quartz.jzhao.xyz/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">Quartz v4</a>, an open-source framework for publishing digital gardens and interconnected notes. Inspired by the Obsidian-style note-taking workflow, the site functions as a searchable knowledge base where ideas, patterns, and problem categories are linked together over time.
+
+Alongside algorithm practice, the project also helped me explore static site generation, markdown-based content systems, note-linking architectures, and developer-focused documentation workflows.`,
       },
     ],
-    techStack: ['Obsidian', 'LeetCode', 'Data Structures', 'Algorithms', 'Patterns'],
+    techStack: ['Quartz v4', 'LeetCode', 'Data Structures', 'Algorithms', 'Patterns', 'Markdown', 'Static Site'],
     images: [],
     videos: [],
   },
@@ -377,21 +382,73 @@ Fallback chain: Redis cache → Live API → In-memory cache → UK seasonal def
     sections: [
       {
         type: 'hero',
-        subtitle: 'A 3D visualisation of birdsong using machine learning — extracting 57 audio features per frame, reducing to 3 PCA components, and rendering as an interactive Three.js comet-trail animation synced to audio.',
+        subtitle: 'A machine learning + 3D visualisation project that transforms birdsong into an interactive spatial animation. The project extracts dozens of audio characteristics from bird calls, compresses them into a three-dimensional representation using PCA, and renders the result as a synchronized comet-trail animation in the browser using Three.js.',
       },
       {
-        type: 'section',
-        title: 'What I Built',
+        type: 'embed',
+        url: 'https://hulashc.github.io/birdsong/',
+        height: '500px',
       },
       {
         type: 'text',
-        content: `A Python audio processing pipeline (librosa + scikit-learn) to extract, scale, and reduce audio features to 3D
-A Three.js web app with a live comet-trail animation, orbit controls, and audio sync
-A binary search for frame-to-time mapping for smooth real-time playback`,
+        content: `Built to explore the intersection of audio DSP, machine learning, and real-time graphics, the project demonstrates how complex sound data can be converted into meaningful visual structures.`,
       },
       {
-        type: 'videos',
-        sources: ['/videos/birdsong1.mp4', '/videos/birdsong2.mp4'],
+        type: 'section',
+        title: 'Project Overview',
+      },
+      {
+        type: 'text',
+        content: `The system processes raw bird audio through a Python-based ML pipeline that extracts 57 audio features per frame using <a href="https://librosa.org/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">librosa</a>. These features include spectral, temporal, and frequency-domain characteristics that describe how the sound evolves over time.
+
+Since visualizing 57 dimensions directly is impossible, the pipeline applies Principal Component Analysis (PCA) using <a href="https://scikit-learn.org/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">scikit-learn</a> to reduce the feature space into 3 principal components while preserving the most important variation in the signal.
+
+The reduced data is then streamed into a browser-based visualization built with <a href="https://threejs.org/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">Three.js</a>, where each frame becomes a point in 3D space. As the audio plays, the points form a flowing comet-like trajectory that represents the structure and rhythm of the birdsong in real time.`,
+      },
+      {
+        type: 'section',
+        title: 'How It Works',
+      },
+      {
+        type: 'text',
+        content: `<strong>1. Audio Processing Pipeline</strong>
+Raw bird audio is loaded and segmented into frames
+57 audio features are extracted per frame
+Features are normalized and scaled
+PCA compresses the data into 3D coordinates
+
+<strong>2. Data Transformation</strong>
+High-dimensional audio data is transformed into:
+X axis → Principal Component 1
+Y axis → Principal Component 2
+Z axis → Principal Component 3
+Each coordinate represents the acoustic state of the birdsong at a moment in time
+
+<strong>3. Real-Time Visualization</strong>
+A Three.js renderer converts PCA output into a dynamic 3D animation
+Orbit controls allow free exploration of the sound structure
+A comet-trail effect visualizes motion through feature space
+Audio playback is synchronized with animation frames
+
+<strong>4. Playback Synchronization</strong>
+To maintain smooth synchronization between animation and audio, a binary search frame-to-time mapping system was implemented. This enables efficient lookup of the nearest visual frame during playback and keeps rendering responsive even with large frame datasets.`,
+      },
+      {
+        type: 'section',
+        title: 'Technical Highlights',
+      },
+      {
+        type: 'skill-badges',
+        items: [
+          { text: 'PCA Dimensionality Reduction', highlight: true },
+          { text: 'Audio Feature Extraction', highlight: true },
+          { text: 'Real-Time WebGL Rendering', highlight: true },
+          { text: 'Spectral Analysis', highlight: true },
+          { text: 'Binary Search Sync', highlight: true },
+          { text: '3D Comet-Trail Animation', highlight: true },
+          { text: 'Interactive Camera Controls', highlight: true },
+          { text: 'End-to-End ML Pipeline', highlight: true },
+        ],
       },
       {
         type: 'section',
@@ -399,50 +456,65 @@ A binary search for frame-to-time mapping for smooth real-time playback`,
       },
       {
         type: 'text',
-        content: `Technology — Role
-Python — Core language
-librosa — Audio feature extraction
-scikit-learn (PCA) — Dimensionality reduction
-NumPy — Numerical computing
-Three.js — 3D rendering
-WebGL — Graphics
-ES Modules — JavaScript modules`,
+        content: `Technology — Purpose
+Python — Audio processing pipeline
+<a href="https://librosa.org/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">librosa</a> — Audio feature extraction
+<a href="https://scikit-learn.org/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">scikit-learn</a> — PCA dimensionality reduction
+NumPy — Numerical processing
+<a href="https://threejs.org/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">Three.js</a> — 3D visualization
+WebGL — GPU rendering
+ES Modules — Frontend architecture`,
       },
       {
-        type: 'section',
-        title: 'Skills Demonstrated',
-      },
-      {
-        type: 'skill-badges',
+        type: 'stats',
         items: [
-          { text: 'Machine Learning', highlight: true },
-          { text: 'Audio DSP', highlight: true },
-          { text: 'Data Visualisation', highlight: true },
-          { text: '3D Graphics', highlight: true },
-          { text: 'Python Pipeline Design', highlight: true },
-          { text: 'Three.js' },
-          { text: 'PCA' },
-          { text: 'librosa' },
+          { num: '57', label: 'Audio Features Per Frame' },
+          { num: '3', label: 'PCA Dimensions' },
+          { num: 'Real-Time', label: 'Audio Sync' },
+          { num: 'Interactive', label: '3D Rendering' },
         ],
       },
       {
         type: 'section',
-        title: 'Why This Project Matters',
+        title: 'Best Way to Explain It in Conversation',
       },
       {
         type: 'text',
-        content: `The Three.js + PCA combination is a strong differentiator — it shows you can bridge the ML pipeline and the frontend output end-to-end.
+        content: `<strong>Short Version (30 seconds)</strong>
+"I built a machine learning visualization project that converts birdsong into a 3D interactive animation. The system extracts 57 audio features from bird calls, reduces them into 3 dimensions using PCA, and visualizes the result in real time using Three.js. It combines audio DSP, machine learning, and frontend graphics into a single pipeline."
 
-This project demonstrates the ability to take raw audio data, apply machine learning techniques for dimensionality reduction, and create an engaging visual experience that brings the data to life.`,
+<strong>Medium Version (Interview Style)</strong>
+"The project started as an experiment in turning sound into geometry. I used Python and librosa to extract 57 audio features from birdsong recordings frame-by-frame. Since that data is high-dimensional, I used PCA with scikit-learn to reduce it into 3 dimensions while preserving the most important patterns in the audio.
+
+I then built a Three.js visualization that renders the PCA output as a moving comet trail synchronized to the original audio. One interesting engineering challenge was keeping the animation synced with playback efficiently, so I implemented a binary-search frame mapping system for real-time lookup.
+
+What makes the project interesting is that it connects the entire pipeline — signal processing, machine learning, dimensionality reduction, and interactive visualization — into a single working system."`,
+      },
+      {
+        type: 'section',
+        title: 'Why It Stands Out',
+      },
+      {
+        type: 'text',
+        content: `This project is a strong differentiator because it combines:
+
+• Machine learning
+• Audio processing
+• Data visualization
+• Real-time rendering
+• Frontend + backend integration
+• Mathematical modeling
+
+Most projects focus on only one of these areas. This one demonstrates the ability to connect them end-to-end.`,
       },
     ],
     techStack: ['Python', 'librosa', 'scikit-learn', 'PCA', 'NumPy', 'Three.js', 'WebGL'],
     images: [],
-    videos: ['/videos/birdsong1.mp4', '/videos/birdsong2.mp4'],
   },
   {
     id: 'real-time-fraud-detection',
     title: 'Real-Time Fraud Detection Pipeline',
+    link: 'https://github.com/hulashc/Real-Time-Fraud-Detection-Pipeline',
     sections: [
       {
         type: 'hero',
@@ -597,14 +669,11 @@ Recent Fraud Alerts:
   {
     id: 'ar-gesture-menu',
     title: 'AR Gesture-Controlled Menu System',
+    link: 'https://github.com/hulashc/ARGestures_controlled_system',
     sections: [
       {
         type: 'hero',
         subtitle: 'Touchless control. No hardware. Just a hand and a camera. A real-time AR interface for touchless human-computer interaction — hand tracking, gesture recognition, and Jarvis-style menu navigation.',
-      },
-      {
-        type: 'videos',
-        sources: ['/videos/argestures.mp4'],
       },
       {
         type: 'section',

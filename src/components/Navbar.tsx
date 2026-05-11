@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { useTheme } from "./ThemeProvider";
 import HeroAnimation from "./HeroAnimation";
-import ScrambleText from "./ScrambleText";
+import { useLanguage } from "./LanguageProvider";
 
 export function Navbar() {
   const { isDark, toggleDark } = useTheme();
+  const { getFirstName, getLastName, getName, cycleLang } = useLanguage();
 
   const bg = isDark ? "#161616" : "#DADADA";
   const text = isDark ? "white" : "black";
@@ -30,14 +31,14 @@ export function Navbar() {
         </div>
         <div className="flex items-center justify-center px-1 sm:px-2 md:px-4 overflow-hidden" style={{ borderRight: `1px solid ${borderColor}` }}>
           <span className="text-center" style={{ color: text }}>
-            <span className="block sm:hidden text-lg sm:text-xl md:text-2xl lg:text-4xl font-bold tracking-wide uppercase whitespace-nowrap">
-              <ScrambleText text="Donempudi" style={{ color: text }} onClick />
+            <span className="block sm:hidden text-lg sm:text-xl md:text-2xl lg:text-4xl font-bold tracking-wide uppercase whitespace-nowrap" onClick={cycleLang} style={{ cursor: 'pointer' }}>
+              {getFirstName()}
             </span>
-            <span className="block sm:hidden text-lg sm:text-xl md:text-2xl lg:text-4xl font-bold tracking-wide uppercase whitespace-nowrap">
-              <ScrambleText text="Hulash Chand" style={{ color: text }} onClick />
+            <span className="block sm:hidden text-lg sm:text-xl md:text-2xl lg:text-4xl font-bold tracking-wide uppercase whitespace-nowrap" onClick={cycleLang} style={{ cursor: 'pointer' }}>
+              {getLastName()}
             </span>
-            <span className="hidden sm:block text-sm sm:text-base md:text-3xl lg:text-6xl font-bold tracking-wider md:tracking-widest uppercase whitespace-nowrap">
-              <ScrambleText text="Donempudi Hulash Chand" style={{ color: text }} onClick />
+            <span className="hidden sm:block text-sm sm:text-base md:text-3xl lg:text-6xl font-bold tracking-wider md:tracking-widest uppercase whitespace-nowrap" onClick={cycleLang} style={{ cursor: 'pointer' }}>
+              {getName()}
             </span>
           </span>
         </div>

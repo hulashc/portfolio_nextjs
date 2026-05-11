@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Asimovian } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { LanguageProvider } from "@/components/LanguageProvider";
 import SmoothScroll from "@/components/SmoothScroll";
 
 const asimovian = Asimovian({
@@ -24,9 +25,11 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`min-h-screen dark ${asimovian.variable}`}>
         <ThemeProvider>
-          <SmoothScroll>
-            {children}
-          </SmoothScroll>
+          <LanguageProvider>
+            <SmoothScroll>
+              {children}
+            </SmoothScroll>
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

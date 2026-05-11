@@ -14,7 +14,7 @@ export interface Blog {
 export const blogs: Blog[] = [
   {
     id: 'developer-infrastructure',
-    title: 'Developer Infrastructure',
+    title: 'Claude, npm, and Developer Infrastructure',
     subtitle: 'Claude, npm, and the Shift from AI Product to Developer Infrastructure',
     sections: [
       {
@@ -143,7 +143,7 @@ That is what makes this moment interesting. AI is no longer just something you c
   },
   {
     id: 'ai-and-cybersecurity',
-    title: 'AI & Cybersecurity',
+    title: 'The AI Cybersecurity Paradox',
     subtitle: 'AI-Powered Cybersecurity: The New Arms Race',
     sections: [
       {
@@ -304,7 +304,7 @@ That is why cybersecurity now feels like an arms race. The challenge is no longe
   },
   {
     id: 'ai-and-infrastructure',
-    title: 'AI & Infrastructure',
+    title: 'AI as Infrastructure',
     subtitle: 'Why AI Is Becoming Infrastructure, Not a Product',
     sections: [
       {
@@ -450,7 +450,7 @@ The next phase of AI is not about novelty. It is about integration.`,
   },
   {
     id: 'context-windows-vs-memory',
-    title: 'AI & ML',
+    title: 'Context Windows vs Memory',
     subtitle: 'Context Windows vs Memory: The Next Bottleneck in LLMs',
     sections: [
       {
@@ -591,7 +591,7 @@ That is why context windows and memory are becoming one of the most important bo
   },
   {
     id: 'black-box-optimization',
-    title: 'AI & Optimization',
+    title: 'Black Box Optimization',
     subtitle: 'Black Box Optimization: How Nature Inspired Smart Search',
     sections: [
       {
@@ -734,7 +734,7 @@ Particle Swarm Optimization took that idea and turned it into an algorithm. And 
   },
   {
     id: 'data-pipelines-python',
-    title: 'Python',
+    title: 'Data Pipelines in Python',
     subtitle: 'Getting started with data pipelines in Python',
     sections: [
       {
@@ -797,7 +797,7 @@ Start simple, measure everything, and iterate based on real usage patterns.`,
   },
   {
     id: 'developer-to-lead',
-    title: 'Career',
+    title: 'From Developer to Lead',
     subtitle: 'From developer to engineering lead',
     sections: [
       {

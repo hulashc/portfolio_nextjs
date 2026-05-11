@@ -284,7 +284,7 @@ export default function DetailPopup({ isOpen, onClose, title, sections, link }: 
       case 'text':
         return (
           <p key={index} style={{ fontSize: '0.8rem', color: textColor, lineHeight: 1.8, marginBottom: '1.5rem', whiteSpace: 'pre-line' }}>
-            {section.content}
+            <span dangerouslySetInnerHTML={{ __html: section.content || '' }} />
           </p>
         );
       case 'section':
@@ -345,6 +345,22 @@ export default function DetailPopup({ isOpen, onClose, title, sections, link }: 
                 style={{ width: '100%', border: `1px solid ${borderColor}` }}
               />
             ))}
+          </div>
+        );
+      case 'embed':
+        return (
+          <div key={index} style={{ marginBottom: '1.5rem' }}>
+            <iframe
+              src={section.url}
+              style={{
+                width: '100%',
+                height: section.height || '400px',
+                border: `1px solid ${borderColor}`,
+              }}
+              title="Embedded content"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
           </div>
         );
       default:

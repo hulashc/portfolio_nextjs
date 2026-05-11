@@ -6,9 +6,11 @@ import { useState } from "react";
 import { projects, Project } from "@/data/projects";
 import DetailPopup from "@/components/DetailPopup";
 import PixelReveal from "@/components/PixelReveal";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export default function ProjectsPage() {
   const { isDark, toggleDark } = useTheme();
+  const { getFirstName, getLastName, getName, cycleLang } = useLanguage();
   const [hoveredBox, setHoveredBox] = useState<string | null>(null);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
@@ -32,13 +34,19 @@ export default function ProjectsPage() {
         <div className="flex items-center justify-center h-full" style={{ width: "70px", borderRight: `1px solid ${borderColor}` }}>
           <img src="/logo.svg" alt="DHC Logo" style={{ width: "50px", height: "50px" }} className={isDark ? 'dark-logo' : 'light-logo'} />
         </div>
-        <Link href="/" className="flex items-center justify-center px-1 sm:px-2 md:px-4 overflow-hidden" style={{ borderRight: `1px solid ${borderColor}`, textDecoration: "none" }}>
+        <span className="flex items-center justify-center px-1 sm:px-2 md:px-4 overflow-hidden" style={{ borderRight: `1px solid ${borderColor}`, cursor: 'pointer' }}>
           <span className="text-center" style={{ color: text }}>
-            <span className="block sm:hidden text-lg sm:text-xl md:text-2xl lg:text-4xl font-bold tracking-wide uppercase whitespace-nowrap">Donempudi</span>
-            <span className="block sm:hidden text-lg sm:text-xl md:text-2xl lg:text-4xl font-bold tracking-wide uppercase whitespace-nowrap">Hulash Chand</span>
-            <span className="hidden sm:block text-sm sm:text-base md:text-3xl lg:text-6xl font-bold tracking-wider md:tracking-widest uppercase whitespace-nowrap">Donempudi Hulash Chand</span>
+            <span className="block sm:hidden text-lg sm:text-xl md:text-2xl lg:text-4xl font-bold tracking-wide uppercase whitespace-nowrap" onClick={cycleLang}>
+              {getFirstName()}
+            </span>
+            <span className="block sm:hidden text-lg sm:text-xl md:text-2xl lg:text-4xl font-bold tracking-wide uppercase whitespace-nowrap" onClick={cycleLang}>
+              {getLastName()}
+            </span>
+            <span className="hidden sm:block text-sm sm:text-base md:text-3xl lg:text-6xl font-bold tracking-wider md:tracking-widest uppercase whitespace-nowrap" onClick={cycleLang}>
+              {getName()}
+            </span>
           </span>
-        </Link>
+        </span>
         <div className="flex items-center justify-center h-full" style={{ width: "70px" }}>
           <button className="flex items-center justify-center" onClick={toggleDark} style={{ cursor: "pointer", background: "none", border: `2px solid ${text}`, width: "50px", height: "50px" }}>
             <div style={{ width: "20px", height: "20px", backgroundColor: text }}></div>

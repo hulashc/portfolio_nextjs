@@ -9,11 +9,11 @@ interface ScrambleTextProps {
   className?: string;
   style?: CSSProperties;
   onScroll?: boolean;
-  onClick?: boolean;
+  onClick?: () => void;
   duration?: number;
 }
 
-export default function ScrambleText({ text, as: Tag = 'p', className = '', style, onScroll = false, onClick = false, duration }: ScrambleTextProps) {
+export default function ScrambleText({ text, as: Tag = 'p', className = '', style, onScroll = false, onClick, duration }: ScrambleTextProps) {
   const ref = useRef<HTMLElement>(null);
   const [trigger, setTrigger] = useState(!onScroll && !onClick);
   const display = useTextScramble({ text, trigger, duration });
@@ -40,6 +40,7 @@ export default function ScrambleText({ text, as: Tag = 'p', className = '', styl
 
   const handleClick = () => {
     if (onClick) {
+      onClick();
       setTrigger(false);
       setTimeout(() => setTrigger(true), 10);
     }
