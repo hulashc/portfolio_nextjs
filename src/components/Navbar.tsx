@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useTheme } from "./ThemeProvider";
 import HeroAnimation from "./HeroAnimation";
+import Ghost from "./Ghost";
 import { useLanguage } from "./LanguageProvider";
 
 export function Navbar() {
@@ -229,6 +230,9 @@ export function Navbar() {
               <p className="text-xs" style={{ color: text }}>London, UK · Open to work</p>
               <p className="text-xs" style={{ color: text }}>Built with Next.js · Vercel</p>
             </div>
+            <div style={{ transform: 'scale(0.35)', transformOrigin: 'center' }}>
+              <Ghost isDark={isDark} />
+            </div>
             <div className="flex flex-row items-center gap-2">
               <a href="mailto:hulashc@gmail.com" style={{ border: `1px solid ${borderColor}`, padding: '8px', cursor: 'pointer' }}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill={text}>
@@ -281,8 +285,8 @@ export function Navbar() {
                 </div>
                 <div className="w-5 h-5 flex items-center justify-center" style={{ border: `1px solid ${text}` }}>
                   <span style={{ color: isDark ? 'white' : 'black', fontSize: '10px' }}>▶</span>
-                </div>
-              </div>
+            </div>
+          </div>
             </a>
           </div>
         </div>

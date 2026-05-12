@@ -54,7 +54,8 @@ export type SectionType =
   | { type: 'cost'; sections: CostSection[] }
   | { type: 'recruiter-cards'; items: RecruiterCard[] }
   | { type: 'videos'; sources: string[] }
-  | { type: 'embed'; url: string; height?: string };
+  | { type: 'embed'; url: string; height?: string }
+  | { type: 'art-viewer' };
 
 export interface Project {
   id: string;

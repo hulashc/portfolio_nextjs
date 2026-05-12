@@ -367,6 +367,7 @@ export default function HeroAnimation() {
       </div>
 
       <DetailPopup
+        key={selectedItem?.id}
         isOpen={selectedItem !== null}
         onClose={() => setSelectedItem(null)}
         title={selectedItem?.title || ''}

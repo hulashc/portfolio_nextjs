@@ -3,6 +3,7 @@
 import { useEffect, useCallback } from 'react';
 import { useTheme } from './ThemeProvider';
 import { SectionType, ProjectStat, SkillBadge, ArchitectureCard, Phase, Decision, CostSection, RecruiterCard } from '@/data/projects';
+import VanGoghArtViewer from './VanGoghArtViewer';
 
 interface DetailPopupProps {
   isOpen: boolean;
@@ -23,11 +24,13 @@ export default function DetailPopup({ isOpen, onClose, title, sections, link }: 
   const highlightBg = isDark ? '#E3DACC' : '#333333';
   const highlightText = isDark ? '#161616' : '#DADADA';
 
-  const handleEscape = useCallback((e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      onClose();
-    }
+  const handleClose = useCallback(() => {
+    onClose();
   }, [onClose]);
+
+  const handleEscape = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') handleClose();
+  }, [handleClose]);
 
   useEffect(() => {
     if (isOpen) {
@@ -363,6 +366,8 @@ export default function DetailPopup({ isOpen, onClose, title, sections, link }: 
             />
           </div>
         );
+      case 'art-viewer':
+        return <VanGoghArtViewer key={index} />;
       default:
         return null;
     }
@@ -371,7 +376,7 @@ export default function DetailPopup({ isOpen, onClose, title, sections, link }: 
   return (
     <div
       className="detail-popup-backdrop"
-      onClick={onClose}
+      onClick={handleClose}
       style={{
         position: 'fixed',
         inset: 0,
@@ -382,7 +387,6 @@ export default function DetailPopup({ isOpen, onClose, title, sections, link }: 
         justifyContent: 'center',
         zIndex: 1000,
         padding: '1rem',
-        animation: 'fadeIn 0.2s ease-out',
       }}
     >
       <div
@@ -396,7 +400,8 @@ export default function DetailPopup({ isOpen, onClose, title, sections, link }: 
           height: '90vh',
           display: 'flex',
           flexDirection: 'column',
-          animation: 'scaleIn 0.2s ease-out',
+          position: 'relative',
+          overflow: 'hidden',
         }}
       >
         <div
@@ -451,7 +456,7 @@ export default function DetailPopup({ isOpen, onClose, title, sections, link }: 
               </a>
             )}
             <button
-              onClick={onClose}
+              onClick={handleClose}
               style={{
                 background: 'none',
                 border: `1px solid ${borderColor}`,
@@ -482,16 +487,6 @@ export default function DetailPopup({ isOpen, onClose, title, sections, link }: 
           {sections.map((section, index) => renderSection(section, index))}
         </div>
       </div>
-      <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        @keyframes scaleIn {
-          from { opacity: 0; transform: scale(0.95); }
-          to { opacity: 1; transform: scale(1); }
-        }
-      `}</style>
     </div>
   );
 }
