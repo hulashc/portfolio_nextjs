@@ -34,7 +34,23 @@
 
   .popup-scroll::-webkit-scrollbar {
     display: block;
-    width: 8px;
+    width: 5px;
+  }
+  .popup-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .popup-scroll::-webkit-scrollbar-thumb {
+    background: rgba(128, 128, 128, 0.25);
+    border-radius: 999px;
+  }
+  .popup-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(128, 128, 128, 0.4);
+  }
+  .popup-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(128, 128, 128, 0.25) transparent;
+    -ms-overflow-style: auto;
+    overscroll-behavior: contain;
   }
 
   .popup-scroll {
@@ -80,7 +96,7 @@
 }
 
 .light .nav-box:hover {
-  background-color: #07090c !important;
+  background-color: #161616 !important;
 }
 
 .light .nav-box:hover .nav-text {

@@ -378,6 +378,155 @@ Alongside algorithm practice, the project also helped me explore static site gen
     videos: [],
   },
   {
+    id: 'lunar-dominion',
+    title: 'Lunar Dominion',
+    sections: [
+      {
+        type: 'hero',
+        subtitle: 'A persistent, browser-based multiplayer strategy game set on the surface of the Moon. The Moon is divided into a massive hexagonal grid — every user starts with a handful of credits and zero territory. From there, they expand, build, and compete in a shared real-time world that never resets.',
+      },
+      {
+        type: 'stats',
+        items: [
+          { num: 'Hex Grid', label: 'Axial Coordinate System' },
+          { num: 'Real-Time', label: 'Supabase Realtime Pub/Sub' },
+          { num: 'RLS', label: 'Row-Level Security' },
+          { num: 'Canvas', label: 'Viewport Culled Rendering' },
+        ],
+      },
+      {
+        type: 'section',
+        title: 'Project Vision & Goals',
+      },
+      {
+        type: 'text',
+        content: `Lunar Hex Dominion is a persistent, browser-based multiplayer strategy game set on the surface of the Moon. The Moon is divided into a massive hexagonal grid — every user starts with a handful of credits and zero territory. From there, they expand, build, and compete in a shared real-time world that never resets.`,
+      },
+      {
+        type: 'section',
+        title: 'Technical Goals',
+      },
+      {
+        type: 'text',
+        content: `🔷 Demonstrate real-time pub/sub architecture with Supabase Realtime
+🔷 Showcase spatial data modelling using axial hex coordinates in PostgreSQL
+🔷 Build a scalable multiplayer synchronisation layer
+🔷 Implement Row-Level Security for conflict-safe tile claiming
+🔷 Practice performant Canvas rendering (viewport culling, chunking)`,
+      },
+      {
+        type: 'section',
+        title: 'Portfolio Goals',
+      },
+      {
+        type: 'text',
+        content: `🎯 Strong frontend engineering — complex interactive UI
+🎯 Backend architecture understanding — schema, indexes, RLS
+🎯 Real-time state management — Zustand + Supabase channels
+🎯 Product thinking — phased roadmap, MVP discipline
+🎯 Visually memorable demo for recruiter / interview settings`,
+      },
+      {
+        type: 'section',
+        title: 'Architecture',
+      },
+      {
+        type: 'architecture-cards',
+        items: [
+          {
+            icon: '🌙',
+            title: 'Game Client',
+            description: 'React + TypeScript canvas renderer with viewport culling. Zustand for client state, WebSocket sync via Supabase Realtime channels.',
+            stack: ['React', 'TypeScript', 'Canvas API', 'Zustand', 'Vite'],
+            color: '#a86fdf',
+          },
+          {
+            icon: '🗄️',
+            title: 'Database Layer',
+            description: 'PostgreSQL with PostGIS for hex coordinate spatial queries. RLS policies per tile for conflict-safe claiming. Optimized indexes for range queries.',
+            stack: ['PostgreSQL', 'PostGIS', 'Supabase', 'RLS'],
+            color: '#6ba3e0',
+          },
+          {
+            icon: '🔄',
+            title: 'Realtime Sync',
+            description: 'Supabase Realtime broadcasts tile state changes to all connected clients. Optimistic updates with server-side validation. Conflict resolution via RLS.',
+            stack: ['Supabase Realtime', 'WebSocket', 'Broadcast', 'Presence'],
+            color: '#e07a3a',
+          },
+          {
+            icon: '🎮',
+            title: 'Game Logic Server',
+            description: 'Server-side game loop handling economy ticks, combat resolution, and territory expansion. PostgreSQL functions for atomic tile operations.',
+            stack: ['PostgreSQL Functions', 'Supabase Edge Functions', 'Node.js'],
+            color: '#4eaa78',
+          },
+        ],
+      },
+      {
+        type: 'section',
+        title: 'Phased Roadmap',
+      },
+      {
+        type: 'phases',
+        items: [
+          {
+            num: '1',
+            title: 'MVP',
+            badge: 'Core Loop',
+            description: 'Interactive hex grid rendering + tile claiming + basic economy. Single-player mode to validate the game loop.',
+            outcomes: ['Hex grid with axial coordinates', 'Click-to-claim tiles', 'Credit economy tick', 'Minimal Canvas renderer'],
+          },
+          {
+            num: '2',
+            title: 'Multiplayer',
+            badge: 'Real-Time',
+            description: 'Supabase Realtime integration for shared game state. Multiple players can see each other on the same map.',
+            outcomes: ['Real-time tile updates', 'Player presence', 'Conflict detection', 'RLS policies per tile'],
+          },
+          {
+            num: '3',
+            title: 'Strategy Layer',
+            badge: 'Gameplay Depth',
+            description: 'Add military units, resource generation, and territory bonuses. Combat resolution and attack/defend mechanics.',
+            outcomes: ['Unit types & stats', 'Combat system', 'Resource generation', 'Territory bonuses'],
+          },
+          {
+            num: '4',
+            title: 'Polish',
+            badge: 'Production',
+            description: 'Visual effects, sound design, mobile support, and performance optimization for large maps with hundreds of players.',
+            outcomes: ['Canvas performance tuning', 'Chunked map loading', 'Mobile touch support', 'Leaderboard / stats'],
+          },
+        ],
+      },
+      {
+        type: 'section',
+        title: 'Skills & Technologies',
+      },
+      {
+        type: 'skill-badges',
+        items: [
+          { text: 'Supabase Realtime', highlight: true },
+          { text: 'PostgreSQL + PostGIS', highlight: true },
+          { text: 'Canvas Rendering', highlight: true },
+          { text: 'RLS', highlight: true },
+          { text: 'Hex Grid Spatial Math', highlight: true },
+          { text: 'Zustand' },
+          { text: 'TypeScript' },
+          { text: 'React' },
+          { text: 'WebSocket Pub/Sub' },
+          { text: 'Vite' },
+          { text: 'Edge Functions' },
+          { text: 'Viewport Culling' },
+        ],
+      },
+    ],
+    techStack: ['React', 'TypeScript', 'Supabase', 'PostgreSQL', 'PostGIS', 'Canvas API', 'Zustand', 'WebSocket'],
+    images: [],
+    videos: [],
+  },
+  {
     id: 'bird-song-mathematical-model',
     title: 'Bird Song Mathematical Model',
     sections: [

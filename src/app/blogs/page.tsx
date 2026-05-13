@@ -16,9 +16,9 @@ export default function BlogsPage() {
   const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
 
   const bg = isDark ? "#161616" : "#DADADA";
-  const text = isDark ? "white" : "black";
+  const text = isDark ? "#DADADA" : "#161616";
   const borderColor = isDark ? "rgba(255,255,240,0.7)" : "rgba(0,0,0,0.6)";
-  const hoverBg = isDark ? "#E3DACC" : "black";
+  const hoverBg = isDark ? "#DADADA" : "#161616";
   const hoverText = isDark ? "#161616" : "#DADADA";
 
   return (

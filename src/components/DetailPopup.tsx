@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import { useTheme } from './ThemeProvider';
 import { SectionType, ProjectStat, SkillBadge, ArchitectureCard, Phase, Decision, CostSection, RecruiterCard } from '@/data/projects';
 import VanGoghArtViewer from './VanGoghArtViewer';
@@ -15,10 +15,11 @@ interface DetailPopupProps {
 
 export default function DetailPopup({ isOpen, onClose, title, sections, link }: DetailPopupProps) {
   const { isDark } = useTheme();
+  const backdropRef = useRef<HTMLDivElement>(null);
 
   const borderColor = isDark ? 'rgba(255,255,240,0.7)' : 'rgba(0,0,0,0.6)';
   const popupBg = isDark ? '#161616' : '#DADADA';
-  const textColor = isDark ? 'white' : 'black';
+  const textColor = isDark ? '#DADADA' : '#161616';
   const mutedColor = isDark ? 'rgba(255,255,240,0.5)' : 'rgba(0,0,0,0.5)';
   const accentBg = isDark ? 'rgba(255,255,240,0.1)' : 'rgba(0,0,0,0.05)';
   const highlightBg = isDark ? '#E3DACC' : '#333333';
@@ -35,12 +36,27 @@ export default function DetailPopup({ isOpen, onClose, title, sections, link }: 
   useEffect(() => {
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden';
+
+      const backdrop = backdropRef.current;
+      const preventBgScroll = (e: WheelEvent | TouchEvent) => {
+        const target = e.target as HTMLElement;
+        if (!target.closest('.popup-scroll')) {
+          e.preventDefault();
+        }
+      };
+      if (backdrop) {
+        backdrop.addEventListener('wheel', preventBgScroll, { passive: false });
+        backdrop.addEventListener('touchmove', preventBgScroll, { passive: false });
+      }
+
+      return () => {
+        document.removeEventListener('keydown', handleEscape);
+        if (backdrop) {
+          backdrop.removeEventListener('wheel', preventBgScroll);
+          backdrop.removeEventListener('touchmove', preventBgScroll);
+        }
+      };
     }
-    return () => {
-      document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'unset';
-    };
   }, [isOpen, handleEscape]);
 
   if (!isOpen) return null;
@@ -375,6 +391,7 @@ export default function DetailPopup({ isOpen, onClose, title, sections, link }: 
 
   return (
     <div
+      ref={backdropRef}
       className="detail-popup-backdrop"
       onClick={handleClose}
       style={{
@@ -480,8 +497,9 @@ export default function DetailPopup({ isOpen, onClose, title, sections, link }: 
           className="popup-scroll"
           style={{
             padding: '1.5rem',
-            overflowY: 'auto',
-            flex: 1,
+            overflowY: 'scroll',
+            flex: '1 1 0',
+            minHeight: 0,
           }}
         >
           {sections.map((section, index) => renderSection(section, index))}

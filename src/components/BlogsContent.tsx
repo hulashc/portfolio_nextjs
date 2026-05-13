@@ -6,7 +6,7 @@ export function BlogsContent() {
   const { isDark } = useTheme();
 
   const bg = isDark ? "#161616" : "#DADADA";
-  const text = isDark ? "white" : "black";
+  const text = isDark ? "#DADADA" : "#161616";
   const borderColor = isDark ? "rgba(255,255,240,0.7)" : "rgba(0,0,0,0.6)";
 
   return (

@@ -44,7 +44,7 @@ export default function HeroAnimation() {
 
   const borderColor = isDark ? 'rgba(255,255,240,0.7)' : 'rgba(0,0,0,0.6)';
   const heroBg = isDark ? '#161616' : '#DADADA';
-  const textColor = isDark ? '#ffffff' : '#000000';
+  const textColor = isDark ? '#DADADA' : '#161616';
   const accentColor = isDark ? '#E3DACC' : '#333333';
 
   // Cleanup raf on unmount
