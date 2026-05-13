@@ -2,13 +2,16 @@
 
 import Link from "next/link";
 import { useTheme } from "./ThemeProvider";
+import { useState } from "react";
 import HeroAnimation from "./HeroAnimation";
+import ActivityButton from "./ActivityButton";
 import Footer from "./Footer";
 import { useLanguage } from "./LanguageProvider";
 
 export function Navbar() {
   const { isDark, toggleDark } = useTheme();
   const { getFirstName, getLastName, getName, cycleLang } = useLanguage();
+  const [hoveredBox, setHoveredBox] = useState<string | null>(null);
 
   const bg = isDark ? "#161616" : "#DADADA";
   const text = isDark ? "white" : "black";
@@ -55,16 +58,20 @@ export function Navbar() {
           <Link 
             href="/projects"
             className="nav-box flex items-center justify-center cursor-pointer p-1 sm:p-2"
-            style={{ borderRight: `1px solid ${borderColor}`, color: text, backgroundColor: bg }}
+            style={{ borderRight: `1px solid ${borderColor}`, color: hoveredBox === "projects" ? hoverText : text, backgroundColor: hoveredBox === "projects" ? hoverBg : bg, transition: 'background-color 0.3s ease, color 0.3s ease' }}
+            onMouseEnter={() => setHoveredBox("projects")}
+            onMouseLeave={() => setHoveredBox(null)}
           >
-            <span className="nav-text text-sm sm:text-lg md:text-2xl lg:text-4xl font-bold uppercase" style={{ color: text }}>projects</span>
+            <span className="nav-text text-sm sm:text-lg md:text-2xl lg:text-4xl font-bold uppercase" style={{ color: hoveredBox === "projects" ? hoverText : text, transition: 'color 0.3s ease' }}>projects</span>
           </Link>
           <Link 
             href="/blogs"
             className="nav-box flex items-center justify-center cursor-pointer p-1 sm:p-2"
-            style={{ color: text, backgroundColor: bg }}
+            style={{ color: hoveredBox === "blogs" ? hoverText : text, backgroundColor: hoveredBox === "blogs" ? hoverBg : bg, transition: 'background-color 0.3s ease, color 0.3s ease' }}
+            onMouseEnter={() => setHoveredBox("blogs")}
+            onMouseLeave={() => setHoveredBox(null)}
           >
-            <span className="nav-text text-sm sm:text-lg md:text-2xl lg:text-4xl font-bold uppercase" style={{ color: text }}>blogs</span>
+            <span className="nav-text text-sm sm:text-lg md:text-2xl lg:text-4xl font-bold uppercase" style={{ color: hoveredBox === "blogs" ? hoverText : text, transition: 'color 0.3s ease' }}>blogs</span>
           </Link>
         </div>
         <HeroAnimation />
@@ -75,8 +82,9 @@ export function Navbar() {
           <h2 className="text-xl md:text-4xl lg:text-6xl font-bold uppercase mb-4" style={{ color: text }}>Data Engineer → AI/ML Engineer</h2>
           <p className="text-sm md:text-xl mb-2" style={{ color: text }}>AWS Consultant / Data Engineer · Cloud & Data Platforms</p>
           <p className="text-sm md:text-xl font-bold mb-4" style={{ color: text }}>AWS · Azure · GCP · MLOps · Spark · Python · Scalable AI Systems</p>
-          <div className="space-y-1" style={{ color: text }}>
+          <div style={{ color: text }}>
             <p className="text-xs md:text-lg">London, United Kingdom</p>
+            <ActivityButton text={text} borderColor={borderColor} isDark={isDark} />
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ backgroundColor: bg }}>

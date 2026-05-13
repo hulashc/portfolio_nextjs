@@ -12,6 +12,7 @@ export default function ProjectsPage() {
   const { isDark, toggleDark } = useTheme();
   const { getFirstName, getLastName, getName, cycleLang } = useLanguage();
   const [hoveredBox, setHoveredBox] = useState<string | null>(null);
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const bg = isDark ? "#161616" : "#DADADA";
@@ -56,15 +57,15 @@ export default function ProjectsPage() {
 
       <div className="w-full" style={{ backgroundColor: bg, marginTop: "-2px" }}>
         <div className="grid grid-cols-2 gap-0" style={{ backgroundColor: bg, minHeight: "8vh", border: `1px solid ${borderColor}` }}>
-          <Link href="/" className="flex items-center justify-center cursor-pointer" style={{ borderRight: `1px solid ${borderColor}`, color: text, backgroundColor: hoveredBox === "home" ? hoverBg : bg }} 
+          <Link href="/" className="flex items-center justify-center cursor-pointer" style={{ borderRight: `1px solid ${borderColor}`, color: hoveredBox === "home" ? hoverText : text, backgroundColor: hoveredBox === "home" ? hoverBg : bg, transition: 'background-color 0.3s ease, color 0.3s ease' }} 
             onMouseEnter={() => setHoveredBox("home")}
             onMouseLeave={() => setHoveredBox(null)}>
-            <span className="text-sm sm:text-lg md:text-2xl lg:text-4xl font-bold uppercase" style={{ color: hoveredBox === "home" ? hoverText : text }}>home</span>
+            <span className="text-sm sm:text-lg md:text-2xl lg:text-4xl font-bold uppercase" style={{ color: hoveredBox === "home" ? hoverText : text, transition: 'color 0.3s ease' }}>home</span>
           </Link>
-          <Link href="/blogs" className="flex items-center justify-center cursor-pointer" style={{ color: text, backgroundColor: hoveredBox === "blogs" ? hoverBg : bg }} 
+          <Link href="/blogs" className="flex items-center justify-center cursor-pointer" style={{ color: hoveredBox === "blogs" ? hoverText : text, backgroundColor: hoveredBox === "blogs" ? hoverBg : bg, transition: 'background-color 0.3s ease, color 0.3s ease' }} 
             onMouseEnter={() => setHoveredBox("blogs")}
             onMouseLeave={() => setHoveredBox(null)}>
-            <span className="text-sm sm:text-lg md:text-2xl lg:text-4xl font-bold uppercase" style={{ color: hoveredBox === "blogs" ? hoverText : text }}>blogs</span>
+            <span className="text-sm sm:text-lg md:text-2xl lg:text-4xl font-bold uppercase" style={{ color: hoveredBox === "blogs" ? hoverText : text, transition: 'color 0.3s ease' }}>blogs</span>
           </Link>
         </div>
         <div className="p-4 md:p-6" style={{ border: `1px solid ${borderColor}`, minHeight: "calc(90vh - 10vh)", marginTop: "-2px" }}>
@@ -74,11 +75,13 @@ export default function ProjectsPage() {
               <div
                 key={project.id}
                 className="p-3 md:p-4 cursor-pointer"
-                style={{ border: `1px solid ${borderColor}`, backgroundColor: bg }}
+                style={{ border: `1px solid ${borderColor}`, backgroundColor: hoveredItem === project.id ? hoverBg : bg, transition: 'background-color 0.3s ease, color 0.3s ease' }}
+                onMouseEnter={() => setHoveredItem(project.id)}
+                onMouseLeave={() => setHoveredItem(null)}
                 onClick={() => setSelectedProject(project)}
               >
-                <h2 className="text-base md:text-xl lg:text-2xl font-bold uppercase mb-2" style={{ color: text }}>{project.title}</h2>
-                <p className="text-xs md:text-sm" style={{ color: text, opacity: 0.6 }}>{project.techStack.slice(0, 4).join(' · ')}{project.techStack.length > 4 ? '...' : ''}</p>
+                <h2 className="text-base md:text-xl lg:text-2xl font-bold uppercase mb-2" style={{ color: hoveredItem === project.id ? hoverText : text, transition: 'color 0.3s ease' }}>{project.title}</h2>
+                <p className="text-xs md:text-sm" style={{ color: hoveredItem === project.id ? hoverText : text, opacity: hoveredItem === project.id ? 1 : 0.6, transition: 'color 0.3s ease, opacity 0.3s ease' }}>{project.techStack.slice(0, 4).join(' · ')}{project.techStack.length > 4 ? '...' : ''}</p>
               </div>
             ))}
           </div>

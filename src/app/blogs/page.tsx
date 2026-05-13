@@ -12,6 +12,7 @@ export default function BlogsPage() {
   const { isDark, toggleDark } = useTheme();
   const { getFirstName, getLastName, getName, cycleLang } = useLanguage();
   const [hoveredBox, setHoveredBox] = useState<string | null>(null);
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
 
   const bg = isDark ? "#161616" : "#DADADA";
@@ -56,15 +57,15 @@ export default function BlogsPage() {
 
       <div className="w-full" style={{ backgroundColor: bg, marginTop: "-2px" }}>
         <div className="grid grid-cols-2 gap-0" style={{ backgroundColor: bg, minHeight: "8vh", border: `1px solid ${borderColor}` }}>
-          <Link href="/" className="flex items-center justify-center cursor-pointer" style={{ borderRight: `1px solid ${borderColor}`, color: text, backgroundColor: hoveredBox === "home" ? hoverBg : bg }} 
+          <Link href="/" className="flex items-center justify-center cursor-pointer" style={{ borderRight: `1px solid ${borderColor}`, color: hoveredBox === "home" ? hoverText : text, backgroundColor: hoveredBox === "home" ? hoverBg : bg, transition: 'background-color 0.3s ease, color 0.3s ease' }} 
             onMouseEnter={() => setHoveredBox("home")}
             onMouseLeave={() => setHoveredBox(null)}>
-            <span className="text-sm sm:text-lg md:text-2xl lg:text-4xl font-bold uppercase" style={{ color: hoveredBox === "home" ? hoverText : text }}>home</span>
+            <span className="text-sm sm:text-lg md:text-2xl lg:text-4xl font-bold uppercase" style={{ color: hoveredBox === "home" ? hoverText : text, transition: 'color 0.3s ease' }}>home</span>
           </Link>
-          <Link href="/projects" className="flex items-center justify-center cursor-pointer" style={{ color: text, backgroundColor: hoveredBox === "projects" ? hoverBg : bg }} 
+          <Link href="/projects" className="flex items-center justify-center cursor-pointer" style={{ color: hoveredBox === "projects" ? hoverText : text, backgroundColor: hoveredBox === "projects" ? hoverBg : bg, transition: 'background-color 0.3s ease, color 0.3s ease' }} 
             onMouseEnter={() => setHoveredBox("projects")}
             onMouseLeave={() => setHoveredBox(null)}>
-            <span className="text-sm sm:text-lg md:text-2xl lg:text-4xl font-bold uppercase" style={{ color: hoveredBox === "projects" ? hoverText : text }}>projects</span>
+            <span className="text-sm sm:text-lg md:text-2xl lg:text-4xl font-bold uppercase" style={{ color: hoveredBox === "projects" ? hoverText : text, transition: 'color 0.3s ease' }}>projects</span>
           </Link>
         </div>
         <div className="p-4 md:p-6" style={{ border: `1px solid ${borderColor}`, minHeight: "calc(90vh - 10vh)", marginTop: "-2px" }}>
@@ -74,12 +75,14 @@ export default function BlogsPage() {
               <div
                 key={blog.id}
                 className="p-3 md:p-4 cursor-pointer"
-                style={{ border: `1px solid ${borderColor}`, backgroundColor: bg }}
+                style={{ border: `1px solid ${borderColor}`, backgroundColor: hoveredItem === blog.id ? hoverBg : bg, transition: 'background-color 0.3s ease, color 0.3s ease' }}
+                onMouseEnter={() => setHoveredItem(blog.id)}
+                onMouseLeave={() => setHoveredItem(null)}
                 onClick={() => setSelectedBlog(blog)}
               >
-                <h2 className="text-base md:text-xl lg:text-2xl font-bold uppercase mb-1" style={{ color: text }}>{blog.title}</h2>
+                <h2 className="text-base md:text-xl lg:text-2xl font-bold uppercase mb-1" style={{ color: hoveredItem === blog.id ? hoverText : text, transition: 'color 0.3s ease' }}>{blog.title}</h2>
                 {blog.subtitle && (
-                  <p className="text-xs md:text-sm" style={{ color: text, opacity: 0.6 }}>{blog.subtitle}</p>
+                  <p className="text-xs md:text-sm" style={{ color: hoveredItem === blog.id ? hoverText : text, opacity: hoveredItem === blog.id ? 1 : 0.6, transition: 'color 0.3s ease, opacity 0.3s ease' }}>{blog.subtitle}</p>
                 )}
               </div>
             ))}
