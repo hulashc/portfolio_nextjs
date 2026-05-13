@@ -1,22 +1,27 @@
 "use client";
 
-import { useTheme } from "./ThemeProvider";
+import Ghost from "./Ghost";
 
-export function Footer() {
-  const { isDark } = useTheme();
+interface FooterProps {
+  isDark: boolean;
+  text: string;
+  borderColor: string;
+}
 
-  const bg = isDark ? "#161616" : "#DADADA";
-  const text = isDark ? "white" : "black";
-  const borderColor = isDark ? "rgba(255,255,240,0.7)" : "rgba(0,0,0,0.6)";
-
+export default function Footer({ isDark, text, borderColor }: FooterProps) {
   return (
     <div style={{ borderBottom: `1px solid ${borderColor}`, borderLeft: `1px solid ${borderColor}`, borderRight: `1px solid ${borderColor}` }} className="p-4">
-      <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-        <div className="flex-1">
+      <div className="flex flex-col items-center gap-4 md:grid md:grid-cols-3">
+        <div className="text-center md:text-left">
           <p className="text-xs" style={{ color: text }}>London, UK · Open to work</p>
           <p className="text-xs" style={{ color: text }}>Built with Next.js · Vercel</p>
         </div>
-        <div className="flex flex-row items-center gap-2">
+        <div className="flex justify-center" style={{ display: 'flex', alignItems: 'center' }}>
+          <div style={{ transform: 'scale(0.35)', transformOrigin: 'center' }}>
+            <Ghost isDark={isDark} />
+          </div>
+        </div>
+        <div className="flex flex-wrap items-center justify-center md:justify-end gap-2">
           <a href="mailto:hulashc@gmail.com" style={{ border: `1px solid ${borderColor}`, padding: '8px', cursor: 'pointer' }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill={text}>
               <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
@@ -42,36 +47,49 @@ export function Footer() {
               <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/>
             </svg>
           </a>
+          <a href="https://classical.music.apple.com/us/album/1670601344" target="_blank" rel="noopener noreferrer" style={{ border: `1px solid ${borderColor}`, padding: '8px 12px', cursor: 'pointer', textDecoration: 'none' }}>
+            <p className="text-xs mb-1" style={{ color: text }}>NOW PLAYING</p>
+            <div className="flex items-center gap-2">
+              <div className="flex items-end h-5 gap-px">
+                {[...Array(5)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="w-1"
+                    style={{
+                      height: `${5 + Math.sin(i) * 8}px`,
+                      backgroundColor: text,
+                      animation: `psy ${1.2 + i * 0.15}s ease-in-out ${i * 0.18}s infinite`
+                    }}
+                  />
+                ))}
+              </div>
+              <div>
+                <p className="text-xs font-bold" style={{ color: text }}>Utopia</p>
+                <p className="text-xs" style={{ color: text, opacity: 0.6 }}>Horacio Pagani</p>
+              </div>
+              <div className="w-10 h-1" style={{ backgroundColor: `${text}33` }}>
+                <div className="h-full" style={{ backgroundColor: text, width: '35%', animation: 'progress 8s linear infinite' }} />
+              </div>
+              <div className="w-5 h-5 flex items-center justify-center" style={{ border: `1px solid ${text}` }}>
+                <span style={{ color: text, fontSize: '10px' }}>▶</span>
+              </div>
+            </div>
+          </a>
         </div>
-        <a href="https://classical.music.apple.com/us/album/1670601344" target="_blank" rel="noopener noreferrer" style={{ border: `1px solid ${borderColor}`, padding: '8px 12px', cursor: 'pointer', textDecoration: 'none' }}>
-          <p className="text-xs mb-1" style={{ color: text }}>NOW PLAYING</p>
-          <div className="flex items-center gap-2">
-            <div className="flex items-end h-5 gap-px">
-              {[...Array(5)].map((_, i) => (
-                <div
-                  key={i}
-                  className="w-1"
-                  style={{
-                    height: `${5 + Math.sin(i) * 8}px`,
-                    backgroundColor: text,
-                    animation: `psy ${1.2 + i * 0.15}s ease-in-out ${i * 0.18}s infinite`
-                  }}
-                />
-              ))}
-            </div>
-            <div>
-              <p className="text-xs font-bold" style={{ color: text }}>Utopia</p>
-              <p className="text-xs" style={{ color: text, opacity: 0.6 }}>Horacio Pagani</p>
-            </div>
-            <div className="w-10 h-1" style={{ backgroundColor: `${text}33` }}>
-              <div className="h-full" style={{ backgroundColor: text, width: '35%', animation: 'progress 8s linear infinite' }} />
-            </div>
-            <div className="w-5 h-5 flex items-center justify-center" style={{ border: `1px solid ${text}` }}>
-              <span style={{ color: isDark ? 'white' : 'black', fontSize: '10px' }}>▶</span>
-            </div>
-          </div>
-        </a>
       </div>
+      <style>{`
+        @keyframes psy {
+          0% { transform: scaleY(0.3) rotate(0deg); height: 6px; }
+          25% { transform: scaleY(1.2) rotate(2deg); height: 28px; }
+          50% { transform: scaleY(0.5) rotate(-1deg); height: 14px; }
+          75% { transform: scaleY(1.1) rotate(-2deg); height: 24px; }
+          100% { transform: scaleY(0.3) rotate(0deg); height: 6px; }
+        }
+        @keyframes progress {
+          0% { width: 0%; }
+          100% { width: 100%; }
+        }
+      `}</style>
     </div>
   );
 }

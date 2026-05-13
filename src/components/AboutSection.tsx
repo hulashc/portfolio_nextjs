@@ -1,7 +1,7 @@
 "use client";
 
 import { useTheme } from "./ThemeProvider";
-import { Footer } from "./Footer";
+import Footer from "./Footer";
 
 export function AboutSection() {
   const { isDark } = useTheme();
@@ -122,7 +122,7 @@ export function AboutSection() {
           <p className="text-xs md:text-sm" style={{ color: text }}>Git · DAGs · CI/CD</p>
         </div>
       </div>
-      <Footer />
+      <Footer isDark={isDark} text={text} borderColor={borderColor} />
     </div>
   );
 }
