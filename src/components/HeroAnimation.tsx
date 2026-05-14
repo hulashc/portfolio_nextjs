@@ -38,8 +38,8 @@ export default function HeroAnimation() {
   animatingRef.current = animating;
 
   const allItems = useMemo<CarouselItem[]>(() => [
-    ...projects.map(p => ({ type: 'project' as const, id: p.id, title: p.title, tech: p.techStack.slice(0, 3).join(' · '), data: p })),
-    ...blogs.map(b => ({ type: 'blog' as const, id: b.id, title: b.title, tech: b.subtitle || '', data: b })),
+    ...projects.filter(p => p.flagship).map(p => ({ type: 'project' as const, id: p.id, title: p.title, tech: p.techStack.slice(0, 3).join(' · '), data: p })),
+    ...blogs.filter(b => b.flagship).map(b => ({ type: 'blog' as const, id: b.id, title: b.title, tech: b.subtitle || '', data: b })),
   ], []);
 
   const borderColor = isDark ? 'rgba(255,255,240,0.7)' : 'rgba(0,0,0,0.6)';

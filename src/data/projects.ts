@@ -60,6 +60,8 @@ export type SectionType =
 export interface Project {
   id: string;
   title: string;
+  excerpt: string;
+  flagship?: boolean;
   sections: SectionType[];
   techStack: string[];
   images: string[];
@@ -71,6 +73,8 @@ export const projects: Project[] = [
   {
     id: 'agriyield-mlops',
     title: 'AgriYield MLOps',
+    flagship: true,
+    excerpt: 'Predicts crop yield across 113 UK fields with live weather integration, automated CI/CD, and production-grade drift monitoring.',
     link: 'https://agri-yield-latest.onrender.com',
     sections: [
       {
@@ -358,6 +362,7 @@ Fallback chain: Redis cache → Live API → In-memory cache → UK seasonal def
   {
     id: 'leet-journey',
     title: 'Leet Journey',
+    excerpt: 'A living collection of LeetCode problem-solving notes — documenting patterns, approaches, and the thinking process behind each solution.',
     link: 'https://notes.hulash.com',
     sections: [
       {
@@ -380,6 +385,7 @@ Alongside algorithm practice, the project also helped me explore static site gen
   {
     id: 'lunar-dominion',
     title: 'Lunar Dominion',
+    excerpt: 'A persistent browser-based multiplayer strategy game on a hexagonal moon grid — real-time sync, spatial data modelling, and RLS-secured tile claiming.',
     sections: [
       {
         type: 'hero',
@@ -529,6 +535,8 @@ Alongside algorithm practice, the project also helped me explore static site gen
   {
     id: 'bird-song-mathematical-model',
     title: 'Bird Song Mathematical Model',
+    flagship: true,
+    excerpt: 'Transforms bird audio into interactive 3D visualizations using PCA dimensionality reduction and real-time WebGL rendering — connecting audio DSP to browser graphics.',
     sections: [
       {
         type: 'hero',
@@ -664,6 +672,7 @@ Most projects focus on only one of these areas. This one demonstrates the abilit
   {
     id: 'real-time-fraud-detection',
     title: 'Real-Time Fraud Detection Pipeline',
+    excerpt: 'Streaming fraud detection that processes financial transactions in real time via Apache Kafka with rule-based detection and a live Streamlit dashboard.',
     link: 'https://github.com/hulashc/Real-Time-Fraud-Detection-Pipeline',
     sections: [
       {
@@ -819,6 +828,7 @@ Recent Fraud Alerts:
   {
     id: 'ar-gesture-menu',
     title: 'AR Gesture-Controlled Menu System',
+    excerpt: 'Touchless computer interaction using hand gestures via a standard webcam — MediaPipe hand tracking, gesture recognition, and AR overlay rendering.',
     link: 'https://github.com/hulashc/ARGestures_controlled_system',
     sections: [
       {
@@ -914,6 +924,7 @@ The full source is available on GitHub.`,
   {
     id: 'real-time-financial-analytics',
     title: 'Real-Time Financial Analytics',
+    excerpt: 'Real-time financial analytics platform processing millions of daily transactions — streaming data from market feeds and trade execution systems for risk management.',
     sections: [
       {
         type: 'text',
@@ -932,6 +943,7 @@ Key features include real-time risk calculations, portfolio performance monitori
   {
     id: 'generative-ai-data-pipeline',
     title: 'Generative AI Data Pipeline',
+    excerpt: 'Scalable RAG data pipeline for LLMs — automated ingestion, chunking, embedding generation, and vector search to provide accurate enterprise context.',
     sections: [
       {
         type: 'text',

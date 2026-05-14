@@ -58,7 +58,7 @@ export default function ProjectsPage() {
         </div>
       </nav>
 
-      <div className="w-full" style={{ backgroundColor: bg, marginTop: "-2px" }}>
+      <div className={`w-full ${isDark ? 'dark' : 'light'}`} style={{ backgroundColor: bg, marginTop: "-2px" }}>
         <div className="grid grid-cols-2 gap-0" style={{ backgroundColor: bg, border: `1px solid ${borderColor}` }}>
           <Link href="/" className="nav-box flex items-center justify-center cursor-pointer min-h-[48px] p-3 sm:p-4" style={{ borderRight: `1px solid ${borderColor}`, color: hoveredBox === "home" ? hoverText : text, backgroundColor: hoveredBox === "home" ? hoverBg : bg, transition: 'background-color 0.3s ease, color 0.3s ease' }} 
             onMouseEnter={() => setHoveredBox("home")}
@@ -84,7 +84,7 @@ export default function ProjectsPage() {
                 onClick={() => setSelectedProject(project)}
               >
                 <h2 className="text-base md:text-xl lg:text-2xl font-bold uppercase mb-2" style={{ color: hoveredItem === project.id ? hoverText : text, transition: 'color 0.3s ease' }}>{project.title}</h2>
-                <p className="text-xs md:text-sm" style={{ color: hoveredItem === project.id ? hoverText : text, opacity: hoveredItem === project.id ? 1 : 0.6, transition: 'color 0.3s ease, opacity 0.3s ease' }}>{project.techStack.slice(0, 4).join(' · ')}{project.techStack.length > 4 ? '...' : ''}</p>
+                <p className="text-xs md:text-sm" style={{ color: hoveredItem === project.id ? hoverText : text, opacity: hoveredItem === project.id ? 1 : 0.6, transition: 'color 0.3s ease, opacity 0.3s ease' }}>{project.excerpt}</p>
               </div>
             ))}
           </div>

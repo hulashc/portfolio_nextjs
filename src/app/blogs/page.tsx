@@ -74,7 +74,7 @@ export default function BlogsPage() {
         </div>
       </nav>
 
-      <div className="w-full" style={{ backgroundColor: bg, marginTop: "-2px" }}>
+      <div className={`w-full ${isDark ? 'dark' : 'light'}`} style={{ backgroundColor: bg, marginTop: "-2px" }}>
         <div className="grid grid-cols-2 gap-0" style={{ backgroundColor: bg, border: `1px solid ${borderColor}` }}>
           <Link href="/" className="nav-box flex items-center justify-center cursor-pointer min-h-[48px] p-3 sm:p-4" style={{ borderRight: `1px solid ${borderColor}`, color: hoveredBox === "home" ? hoverText : text, backgroundColor: hoveredBox === "home" ? hoverBg : bg, transition: 'background-color 0.3s ease, color 0.3s ease' }} 
             onMouseEnter={() => setHoveredBox("home")}

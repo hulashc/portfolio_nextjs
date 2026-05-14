@@ -4,6 +4,7 @@ export interface Blog {
   id: string;
   title: string;
   subtitle?: string;
+  flagship?: boolean;
   sections: SectionType[];
   techStack?: string[];
   images: string[];
@@ -15,7 +16,8 @@ export const blogs: Blog[] = [
   {
     id: 'developer-infrastructure',
     title: 'Claude, npm, and Developer Infrastructure',
-    subtitle: 'Claude, npm, and the Shift from AI Product to Developer Infrastructure',
+    flagship: true,
+    subtitle: 'Claude, npm, and the shift from AI product to developer infrastructure — what it means for AI platform engineering',
     sections: [
       {
         type: 'hero',
@@ -144,7 +146,7 @@ That is what makes this moment interesting. AI is no longer just something you c
   {
     id: 'ai-and-cybersecurity',
     title: 'The AI Cybersecurity Paradox',
-    subtitle: 'AI-Powered Cybersecurity: The New Arms Race',
+    subtitle: 'AI-powered cybersecurity: defending data infrastructure and ML systems at scale',
     sections: [
       {
         type: 'hero',
@@ -305,7 +307,8 @@ That is why cybersecurity now feels like an arms race. The challenge is no longe
   {
     id: 'ai-and-infrastructure',
     title: 'AI as Infrastructure',
-    subtitle: 'Why AI Is Becoming Infrastructure, Not a Product',
+    flagship: true,
+    subtitle: 'Why AI is becoming infrastructure, not a product — and what that means for data and ML engineers',
     sections: [
       {
         type: 'hero',
@@ -451,7 +454,8 @@ The next phase of AI is not about novelty. It is about integration.`,
   {
     id: 'context-windows-vs-memory',
     title: 'Context Windows vs Memory',
-    subtitle: 'Context Windows vs Memory: The Next Bottleneck in LLMs',
+    flagship: true,
+    subtitle: 'Context windows vs memory: the next bottleneck in LLMs and what it means for AI engineering',
     sections: [
       {
         type: 'hero',
@@ -592,7 +596,7 @@ That is why context windows and memory are becoming one of the most important bo
   {
     id: 'black-box-optimization',
     title: 'Black Box Optimization',
-    subtitle: 'Black Box Optimization: How Nature Inspired Smart Search',
+    subtitle: 'Black box optimization: how nature-inspired algorithms power modern ML search and tuning',
     sections: [
       {
         type: 'hero',
@@ -735,7 +739,7 @@ Particle Swarm Optimization took that idea and turned it into an algorithm. And 
   {
     id: 'data-pipelines-python',
     title: 'Data Pipelines in Python',
-    subtitle: 'Getting started with data pipelines in Python',
+    subtitle: 'Building production data pipelines in Python with Airflow, Great Expectations, and ETL best practices',
     sections: [
       {
         type: 'hero',
@@ -798,7 +802,7 @@ Start simple, measure everything, and iterate based on real usage patterns.`,
   {
     id: 'developer-to-lead',
     title: 'From Developer to Lead',
-    subtitle: 'From developer to engineering lead',
+    subtitle: 'From developer to engineering lead — leadership lessons from building data and ML platforms',
     sections: [
       {
         type: 'hero',

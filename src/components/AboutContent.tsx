@@ -17,15 +17,16 @@ export function AboutContent() {
     <div id="about-section" className="w-full p-3 md:p-4 max-w-screen overflow-x-hidden" style={{ backgroundColor: bg, marginTop: "-2px" }}>
       <div className="text-center p-3 md:p-4" style={{ border: `1px solid ${borderColor}` }}>
         <h2 className="text-xl md:text-4xl lg:text-6xl font-bold uppercase mb-4" style={{ color: text }}>Data Engineer → AI/ML Engineer</h2>
-        <p className="text-sm md:text-xl mb-2" style={{ color: text }}>AWS Consultant / Data Engineer · Cloud & Data Platforms</p>
-        <p className="text-sm md:text-xl font-bold mb-4" style={{ color: text }}>AWS · Azure · GCP · MLOps · Spark · Python · Scalable AI Systems</p>
+        <p className="text-sm md:text-xl mb-4 leading-relaxed max-w-3xl mx-auto" style={{ color: text }}>
+          I build scalable data platforms, MLOps workflows, and AI-ready infrastructure across AWS and modern analytics stacks. My work spans pipeline orchestration, model deployment, and production engineering for data-intensive systems.
+        </p>
         <div style={{ color: text }}>
           <p className="text-sm md:text-lg">London, United Kingdom</p>
           <ActivityButton text={text} borderColor={borderColor} isDark={isDark} />
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2" style={{ backgroundColor: bg }}>
-        <div style={{ border: `1px solid ${borderColor}` }} className="p-3 md:p-4">
+      <div className="grid grid-cols-1 md:grid-cols-2" style={{ border: `1px solid ${borderColor}`, backgroundColor: bg }}>
+        <div className="p-3 md:p-4" style={{ borderRight: `1px solid ${borderColor}` }}>
           <h3 className="text-2xl md:text-3xl font-bold uppercase mb-4 pb-2" style={{ color: text, borderBottom: `2px solid ${borderColor}` }}>Experience</h3>
           <div className="space-y-4">
             {[
@@ -47,7 +48,7 @@ export function AboutContent() {
             ))}
           </div>
         </div>
-        <div style={{ border: `1px solid ${borderColor}` }} className="p-3 md:p-4">
+        <div className="p-3 md:p-4">
           <h3 className="text-2xl md:text-3xl font-bold uppercase mb-4 pb-2" style={{ color: text, borderBottom: `2px solid ${borderColor}` }}>Education</h3>
           <div className="space-y-4">
             {[
@@ -69,15 +70,27 @@ export function AboutContent() {
       </div>
       <div style={{ border: `1px solid ${borderColor}` }} className="p-3 md:p-4">
         <h3 className="text-2xl md:text-3xl font-bold uppercase mb-6 pb-2" style={{ color: text, borderBottom: `2px solid ${borderColor}` }}>Skills</h3>
-        <div className="grid grid-cols-2 gap-4">
-          <p className="text-sm md:text-base" style={{ color: text }}>Python · SQL · PySpark</p>
-          <p className="text-sm md:text-base" style={{ color: text }}>Spark · Kafka · Airflow</p>
-          <p className="text-sm md:text-base" style={{ color: text }}>AWS · Azure · GCP</p>
-          <p className="text-sm md:text-base" style={{ color: text }}>LLM · RAG · LangChain</p>
-          <p className="text-sm md:text-base" style={{ color: text }}>dbt · Snowflake · Delta</p>
-          <p className="text-sm md:text-base" style={{ color: text }}>Terraform · Docker · K8s</p>
-          <p className="text-sm md:text-base" style={{ color: text }}>MLflow · Vertex AI</p>
-          <p className="text-sm md:text-base" style={{ color: text }}>Git · DAGs · CI/CD</p>
+        <div className="space-y-3">
+          <div className="flex items-start gap-2">
+            <span className="text-xs md:text-sm font-bold uppercase tracking-wider whitespace-nowrap" style={{ color: text, opacity: 0.6, minWidth: "8rem" }}>Pipeline Orchestration</span>
+            <span className="text-xs md:text-sm" style={{ color: text }}>Airflow · Kafka · Spark · dbt</span>
+          </div>
+          <div className="flex items-start gap-2">
+            <span className="text-xs md:text-sm font-bold uppercase tracking-wider whitespace-nowrap" style={{ color: text, opacity: 0.6, minWidth: "8rem" }}>ML Deployment</span>
+            <span className="text-xs md:text-sm" style={{ color: text }}>MLflow · Docker · K8s · CI/CD</span>
+          </div>
+          <div className="flex items-start gap-2">
+            <span className="text-xs md:text-sm font-bold uppercase tracking-wider whitespace-nowrap" style={{ color: text, opacity: 0.6, minWidth: "8rem" }}>Cloud Infrastructure</span>
+            <span className="text-xs md:text-sm" style={{ color: text }}>AWS · Terraform · Serverless · GCP</span>
+          </div>
+          <div className="flex items-start gap-2">
+            <span className="text-xs md:text-sm font-bold uppercase tracking-wider whitespace-nowrap" style={{ color: text, opacity: 0.6, minWidth: "8rem" }}>LLM Applications</span>
+            <span className="text-xs md:text-sm" style={{ color: text }}>RAG · LangChain · Vector DBs · LLM APIs</span>
+          </div>
+          <div className="flex items-start gap-2">
+            <span className="text-xs md:text-sm font-bold uppercase tracking-wider whitespace-nowrap" style={{ color: text, opacity: 0.6, minWidth: "8rem" }}>Data Engineering</span>
+            <span className="text-xs md:text-sm" style={{ color: text }}>Python · SQL · PySpark · Snowflake · Delta</span>
+          </div>
         </div>
       </div>
       <div style={{ border: `1px solid ${borderColor}` }} className="p-3 md:p-4">
