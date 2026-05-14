@@ -59,16 +59,16 @@ export default function ProjectsPage() {
       </nav>
 
       <div className="w-full" style={{ backgroundColor: bg, marginTop: "-2px" }}>
-        <div className="grid grid-cols-2 gap-0" style={{ backgroundColor: bg, minHeight: "8vh", border: `1px solid ${borderColor}` }}>
-          <Link href="/" className="flex items-center justify-center cursor-pointer" style={{ borderRight: `1px solid ${borderColor}`, color: hoveredBox === "home" ? hoverText : text, backgroundColor: hoveredBox === "home" ? hoverBg : bg, transition: 'background-color 0.3s ease, color 0.3s ease' }} 
+        <div className="grid grid-cols-2 gap-0" style={{ backgroundColor: bg, border: `1px solid ${borderColor}` }}>
+          <Link href="/" className="nav-box flex items-center justify-center cursor-pointer min-h-[48px] p-3 sm:p-4" style={{ borderRight: `1px solid ${borderColor}`, color: hoveredBox === "home" ? hoverText : text, backgroundColor: hoveredBox === "home" ? hoverBg : bg, transition: 'background-color 0.3s ease, color 0.3s ease' }} 
             onMouseEnter={() => setHoveredBox("home")}
             onMouseLeave={() => setHoveredBox(null)}>
-            <span className="text-sm sm:text-lg md:text-2xl lg:text-4xl font-bold uppercase" style={{ color: hoveredBox === "home" ? hoverText : text, transition: 'color 0.3s ease' }}>home</span>
+            <span className="nav-text text-sm sm:text-lg md:text-2xl lg:text-4xl font-bold uppercase" style={{ color: hoveredBox === "home" ? hoverText : text, transition: 'color 0.3s ease' }}>home</span>
           </Link>
-          <Link href="/blogs" className="flex items-center justify-center cursor-pointer" style={{ color: hoveredBox === "blogs" ? hoverText : text, backgroundColor: hoveredBox === "blogs" ? hoverBg : bg, transition: 'background-color 0.3s ease, color 0.3s ease' }} 
+          <Link href="/blogs" className="nav-box flex items-center justify-center cursor-pointer min-h-[48px] p-3 sm:p-4" style={{ color: hoveredBox === "blogs" ? hoverText : text, backgroundColor: hoveredBox === "blogs" ? hoverBg : bg, transition: 'background-color 0.3s ease, color 0.3s ease' }} 
             onMouseEnter={() => setHoveredBox("blogs")}
             onMouseLeave={() => setHoveredBox(null)}>
-            <span className="text-sm sm:text-lg md:text-2xl lg:text-4xl font-bold uppercase" style={{ color: hoveredBox === "blogs" ? hoverText : text, transition: 'color 0.3s ease' }}>blogs</span>
+            <span className="nav-text text-sm sm:text-lg md:text-2xl lg:text-4xl font-bold uppercase" style={{ color: hoveredBox === "blogs" ? hoverText : text, transition: 'color 0.3s ease' }}>blogs</span>
           </Link>
         </div>
         <div className="p-4 md:p-6" style={{ border: `1px solid ${borderColor}`, minHeight: "calc(90vh - 10vh)", marginTop: "-2px" }}>
