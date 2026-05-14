@@ -14,6 +14,9 @@ const asimovian = Asimovian({
 export const metadata: Metadata = {
   title: "Hulash Chand | Data Engineer → AI/ML Engineer",
   description: "Building scalable data infrastructure for AI/ML",
+  alternates: {
+    canonical: "https://www.hulash.com",
+  },
 };
 
 export default function RootLayout({

@@ -4,9 +4,11 @@ import Link from "next/link";
 import { useTheme } from "@/components/ThemeProvider";
 import { useState } from "react";
 import { projects, Project } from "@/data/projects";
-import DetailPopup from "@/components/DetailPopup";
+import dynamic from "next/dynamic";
 import { useLanguage } from "@/components/LanguageProvider";
 import Footer from "@/components/Footer";
+
+const DetailPopup = dynamic(() => import("@/components/DetailPopup"), { ssr: false });
 
 export default function ProjectsPage() {
   const { isDark, toggleDark } = useTheme();
@@ -22,7 +24,8 @@ export default function ProjectsPage() {
   const hoverText = isDark ? "#161616" : "#DADADA";
 
   return (
-    <div className="w-full p-2 md:p-4 min-h-screen" style={{ backgroundColor: bg }}>
+    <div className="w-full p-3 md:p-4 min-h-screen" style={{ backgroundColor: bg }}>
+      <link rel="canonical" href="https://www.hulash.com/projects" />
       <nav
         className="grid w-full overflow-hidden"
         style={{

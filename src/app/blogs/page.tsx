@@ -4,9 +4,11 @@ import Link from "next/link";
 import { useTheme } from "@/components/ThemeProvider";
 import { useState } from "react";
 import { blogs, Blog } from "@/data/blogs";
-import DetailPopup from "@/components/DetailPopup";
+import dynamic from "next/dynamic";
 import { useLanguage } from "@/components/LanguageProvider";
 import Footer from "@/components/Footer";
+
+const DetailPopup = dynamic(() => import("@/components/DetailPopup"), { ssr: false });
 
 export default function BlogsPage() {
   const { isDark, toggleDark } = useTheme();
@@ -22,7 +24,24 @@ export default function BlogsPage() {
   const hoverText = isDark ? "#161616" : "#DADADA";
 
   return (
-    <div className="w-full p-2 md:p-4 min-h-screen" style={{ backgroundColor: bg }}>
+    <div className="w-full p-3 md:p-4 min-h-screen" style={{ backgroundColor: bg }}>
+      <link rel="canonical" href="https://www.hulash.com/blogs" />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Blog",
+            name: "Hulash Chand's Blog",
+            description: "Thoughts on data engineering, AI/ML, and building things.",
+            url: "https://www.hulash.com/blogs",
+            author: {
+              "@type": "Person",
+              name: "Hulash Chand",
+            },
+          }),
+        }}
+      />
       <nav
         className="grid w-full overflow-hidden"
         style={{

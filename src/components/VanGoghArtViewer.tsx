@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
 const GRID = 3;
@@ -76,9 +77,12 @@ export default function VanGoghArtViewer() {
                 className={`vav-cell ${i === sel ? 'selected' : ''}`}
                 onClick={() => { setSel(i); }}
               >
-                <img
+                <Image
                   src={src}
                   alt={`Art ${i + 1}`}
+                  fill
+                  sizes="(max-width: 640px) 50vw, 200px"
+                  style={{ objectFit: 'cover', transform: 'scale3d(2, 2, 2)', transition: 'transform 1s var(--ease-in-out)', userSelect: 'none', pointerEvents: 'none' }}
                   onLoad={() => setReady(p => Math.min(p + 1, ASSETS.length))}
                   onError={() => setReady(p => Math.min(p + 1, ASSETS.length))}
                 />

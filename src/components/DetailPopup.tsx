@@ -77,7 +77,7 @@ export default function DetailPopup({ isOpen, onClose, title, sections, link }: 
       <span style={{ fontSize: 'clamp(1.25rem, 4vw, 2rem)', fontWeight: 800, color: textColor, lineHeight: 1 }}>
         {stat.num}
       </span>
-      <span style={{ fontSize: '0.65rem', color: mutedColor, textAlign: 'center' }}>{stat.label}</span>
+      <span style={{ fontSize: '0.7rem', color: mutedColor, textAlign: 'center' }}>{stat.label}</span>
     </div>
   );
 
@@ -85,7 +85,7 @@ export default function DetailPopup({ isOpen, onClose, title, sections, link }: 
     <span
       key={index}
       style={{
-        fontSize: '0.7rem',
+        fontSize: '0.75rem',
         padding: '0.25rem 0.75rem',
         background: badge.highlight ? highlightBg : accentBg,
         color: badge.highlight ? highlightText : mutedColor,
@@ -180,7 +180,7 @@ export default function DetailPopup({ isOpen, onClose, title, sections, link }: 
           <h4 style={{ fontSize: '0.875rem', fontWeight: 700, color: textColor, margin: 0 }}>{phase.title}</h4>
           <span
             style={{
-              fontSize: '0.65rem',
+              fontSize: '0.7rem',
               padding: '2px 8px',
               background: accentBg,
               color: mutedColor,
@@ -198,8 +198,8 @@ export default function DetailPopup({ isOpen, onClose, title, sections, link }: 
             <span
               key={i}
               style={{
-                fontSize: '0.65rem',
-                padding: '2px 8px',
+              fontSize: '0.7rem',
+              padding: '2px 8px',
                 background: isDark ? 'rgba(78, 170, 120, 0.2)' : 'rgba(78, 170, 120, 0.1)',
                 color: '#4eaa78',
                 borderRadius: '9999px',
@@ -457,8 +457,8 @@ export default function DetailPopup({ isOpen, onClose, title, sections, link }: 
                   background: 'none',
                   border: `1px solid ${borderColor}`,
                   color: textColor,
-                  width: '36px',
-                  height: '36px',
+                  width: '44px',
+                  height: '44px',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -478,8 +478,8 @@ export default function DetailPopup({ isOpen, onClose, title, sections, link }: 
                 background: 'none',
                 border: `1px solid ${borderColor}`,
                 color: textColor,
-                width: '36px',
-                height: '36px',
+                width: '44px',
+                height: '44px',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',

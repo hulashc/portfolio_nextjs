@@ -340,6 +340,12 @@ export default function HeroAnimation() {
             cursor: animating ? 'default' : 'pointer',
             opacity: 0.5,
             zIndex: 10,
+            width: '48px',
+            height: '48px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 0,
           }}
           aria-label="Previous"
         >
@@ -359,6 +365,12 @@ export default function HeroAnimation() {
             cursor: animating ? 'default' : 'pointer',
             opacity: 0.5,
             zIndex: 10,
+            width: '48px',
+            height: '48px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 0,
           }}
           aria-label="Next"
         >
