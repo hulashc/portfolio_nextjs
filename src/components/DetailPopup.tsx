@@ -382,6 +382,35 @@ export default function DetailPopup({ isOpen, onClose, title, sections, link }: 
             />
           </div>
         );
+      case 'paper-button':
+        return (
+          <div key={index} style={{ marginBottom: '1.5rem' }}>
+            <a
+              href={section.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                padding: '0.6rem 1.2rem',
+                border: `1px solid ${borderColor}`,
+                background: accentBg,
+                color: textColor,
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                textDecoration: 'none',
+                letterSpacing: '0.02em',
+                transition: 'background 0.15s',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = isDark ? 'rgba(255,255,240,0.15)' : 'rgba(0,0,0,0.1)')}
+              onMouseLeave={e => (e.currentTarget.style.background = accentBg)}
+            >
+              <span style={{ fontSize: '1rem' }}>📄</span>
+              {section.label}
+            </a>
+          </div>
+        );
       case 'art-viewer':
         return <VanGoghArtViewer key={index} />;
       default:
