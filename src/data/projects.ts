@@ -55,6 +55,7 @@ export type SectionType =
   | { type: 'recruiter-cards'; items: RecruiterCard[] }
   | { type: 'videos'; sources: string[] }
   | { type: 'embed'; url: string; height?: string }
+  | { type: 'paper-button'; label: string; url: string }
   | { type: 'art-viewer' };
 
 export interface Project {
@@ -546,6 +547,16 @@ Alongside algorithm practice, the project also helped me explore static site gen
         type: 'embed',
         url: 'https://hulashc.github.io/birdsong/',
         height: '500px',
+      },
+      {
+        type: 'section',
+        title: 'Research Paper',
+        content: 'A full academic paper documenting the mathematical model, feature extraction pipeline, PCA reduction, and system architecture.',
+      },
+      {
+        type: 'paper-button',
+        label: 'Birdsong_paper',
+        url: '/Birdsong_paper.pdf',
       },
       {
         type: 'text',
