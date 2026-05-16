@@ -68,6 +68,7 @@ export interface Project {
   images: string[];
   videos?: string[];
   link?: string;
+  githubLink?: string;
 }
 
 export const projects: Project[] = [
@@ -538,6 +539,7 @@ Alongside algorithm practice, the project also helped me explore static site gen
     title: 'Bird Song Mathematical Model',
     flagship: true,
     excerpt: 'Transforms bird audio into interactive 3D visualizations using PCA dimensionality reduction and real-time WebGL rendering — connecting audio DSP to browser graphics.',
+    githubLink: 'https://github.com/hulashc/birdsong',
     sections: [
       {
         type: 'hero',
