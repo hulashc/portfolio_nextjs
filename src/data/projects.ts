@@ -538,12 +538,13 @@ Alongside algorithm practice, the project also helped me explore static site gen
     id: 'bird-song-mathematical-model',
     title: 'Bird Song Mathematical Model',
     flagship: true,
-    excerpt: 'Transforms bird audio into interactive 3D visualizations using PCA dimensionality reduction and real-time WebGL rendering — connecting audio DSP to browser graphics.',
+    excerpt: 'Interactive 3D acoustic manifold visualization with MFCC feature extraction, PCA dimensionality reduction, kNN species classification, and a conversational AI assistant — powered by FastAPI, Three.js, and Groq.',
+    link: 'https://hulashc.github.io/birdsong/',
     githubLink: 'https://github.com/hulashc/birdsong',
     sections: [
       {
         type: 'hero',
-        subtitle: 'A machine learning + 3D visualisation project that transforms birdsong into an interactive spatial animation. The project extracts dozens of audio characteristics from bird calls, compresses them into a three-dimensional representation using PCA, and renders the result as a synchronized comet-trail animation in the browser using Three.js.',
+        subtitle: 'An interactive 3D acoustic manifold visualization of bird vocalisations. Extracts 57-dimensional MFCC feature vectors per frame, reduces them to 3 principal components via PCA, classifies species using kNN (cosine similarity, k=5), and serves it all through a FastAPI backend with a Three.js frontend and a conversational AI assistant powered by Llama 3.1.',
       },
       {
         type: 'embed',
@@ -570,11 +571,13 @@ Alongside algorithm practice, the project also helped me explore static site gen
       },
       {
         type: 'text',
-        content: `The system processes raw bird audio through a Python-based ML pipeline that extracts 57 audio features per frame using <a href="https://librosa.org/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">librosa</a>. These features include spectral, temporal, and frequency-domain characteristics that describe how the sound evolves over time.
+        content: `The system processes raw bird audio through a Python-based ML pipeline that extracts 57-dimensional feature vectors per frame using <a href="https://librosa.org/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">librosa</a>. The feature vector comprises MFCCs (1–13), delta and delta-delta MFCCs, spectral centroid, bandwidth, rolloff, zero-crossing rate, RMS energy, and mel-spectrogram bands — capturing timbre, texture, and spectral range of each 23ms frame.
 
-Since visualizing 57 dimensions directly is impossible, the pipeline applies Principal Component Analysis (PCA) using <a href="https://scikit-learn.org/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">scikit-learn</a> to reduce the feature space into 3 principal components while preserving the most important variation in the signal.
+Since visualizing 57 dimensions directly is impossible, the pipeline applies Principal Component Analysis (PCA) using <a href="https://scikit-learn.org/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">scikit-learn</a> to reduce the feature space into 3 principal components — mapped to Timbre (X), Texture (Y), and Spectral range (Z) — while preserving the most important variation in the signal.
 
-The reduced data is then streamed into a browser-based visualization built with <a href="https://threejs.org/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">Three.js</a>, where each frame becomes a point in 3D space. As the audio plays, the points form a flowing comet-like trajectory that represents the structure and rhythm of the birdsong in real time.`,
+The reduced data is rendered as an animated 3D trajectory using <a href="https://threejs.org/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">Three.js</a>, with points coloured by energy (dark → silence, amber → peak) and sized by amplitude. A <strong>kNN classifier</strong> (cosine similarity, k=5) identifies the closest matching species from the manifold.
+
+A FastAPI backend serves the manifold data, processes uploaded audio files for real-time classification, and powers a conversational AI assistant built on <strong>Llama 3.1 8B Instant</strong> via Groq — enabling natural-language questions about each species.`,
       },
       {
         type: 'section',
@@ -583,26 +586,32 @@ The reduced data is then streamed into a browser-based visualization built with 
       {
         type: 'text',
         content: `<strong>1. Audio Processing Pipeline</strong>
-Raw bird audio is loaded and segmented into frames
-57 audio features are extracted per frame
+Raw bird audio is loaded and segmented into 23ms frames
+57-dimensional MFCC + spectral features extracted per frame using librosa
 Features are normalized and scaled
-PCA compresses the data into 3D coordinates
+PCA compresses the data into 3 principal coordinates
 
-<strong>2. Data Transformation</strong>
-High-dimensional audio data is transformed into:
-X axis → Principal Component 1
-Y axis → Principal Component 2
-Z axis → Principal Component 3
-Each coordinate represents the acoustic state of the birdsong at a moment in time
+<strong>2. Acoustic Manifold</strong>
+X axis → Timbre (tonal colour of the voice)
+Y axis → Texture (how rapidly the sound changes)
+Z axis → Spectral range (frequency distribution)
+Points coloured by energy, sized by amplitude
 
-<strong>3. Real-Time Visualization</strong>
-A Three.js renderer converts PCA output into a dynamic 3D animation
-Orbit controls allow free exploration of the sound structure
-A comet-trail effect visualizes motion through feature space
-Audio playback is synchronized with animation frames
+<strong>3. Real-Time 3D Visualization</strong>
+Three.js renders the PCA trajectory as an animated comet trail
+Orbit controls for free exploration of the sound structure
+Points are coloured by energy (dark → silence, amber → peak)
+Binary-search frame mapping keeps audio synced with animation
 
-<strong>4. Playback Synchronization</strong>
-To maintain smooth synchronization between animation and audio, a binary search frame-to-time mapping system was implemented. This enables efficient lookup of the nearest visual frame during playback and keeps rendering responsive even with large frame datasets.`,
+<strong>4. kNN Species Classification</strong>
+Upload your own audio via drag-and-drop
+Pipeline extracts features and projects into the same PCA space
+Cosine similarity search (k=5) identifies the closest matching species
+
+<strong>5. AI Assistant</strong>
+Conversational ornithology assistant powered by Llama 3.1 8B Instant (Groq)
+Ask natural-language questions about species behaviour, habitat, and characteristics
+Full chat history maintained per session`,
       },
       {
         type: 'section',
@@ -611,14 +620,14 @@ To maintain smooth synchronization between animation and audio, a binary search 
       {
         type: 'skill-badges',
         items: [
+          { text: 'MFCC Feature Extraction', highlight: true },
           { text: 'PCA Dimensionality Reduction', highlight: true },
-          { text: 'Audio Feature Extraction', highlight: true },
-          { text: 'Real-Time WebGL Rendering', highlight: true },
-          { text: 'Spectral Analysis', highlight: true },
-          { text: 'Binary Search Sync', highlight: true },
-          { text: '3D Comet-Trail Animation', highlight: true },
-          { text: 'Interactive Camera Controls', highlight: true },
-          { text: 'End-to-End ML Pipeline', highlight: true },
+          { text: 'kNN Species Classification', highlight: true },
+          { text: 'FastAPI Backend', highlight: true },
+          { text: 'Three.js 3D Rendering', highlight: true },
+          { text: 'Groq LLM Integration', highlight: true },
+          { text: 'Audio Upload & Classification', highlight: true },
+          { text: 'GitHub Pages + Render', highlight: true },
         ],
       },
       {
@@ -629,20 +638,21 @@ To maintain smooth synchronization between animation and audio, a binary search 
         type: 'text',
         content: `Technology — Purpose
 Python — Audio processing pipeline
-<a href="https://librosa.org/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">librosa</a> — Audio feature extraction
-<a href="https://scikit-learn.org/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">scikit-learn</a> — PCA dimensionality reduction
-NumPy — Numerical processing
-<a href="https://threejs.org/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">Three.js</a> — 3D visualization
-WebGL — GPU rendering
-ES Modules — Frontend architecture`,
+<a href="https://librosa.org/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">librosa</a> — MFCC + spectral feature extraction
+<a href="https://scikit-learn.org/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">scikit-learn</a> — PCA + kNN classifier
+<a href="https://fastapi.tiangolo.com/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">FastAPI</a> — REST API backend
+<a href="https://threejs.org/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">Three.js</a> — 3D WebGL rendering
+<a href="https://groq.com/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">Groq API</a> — Llama 3.1 conversational AI
+Render — Backend hosting
+GitHub Pages — Frontend hosting`,
       },
       {
         type: 'stats',
         items: [
-          { num: '57', label: 'Audio Features Per Frame' },
+          { num: '57', label: 'MFCC Features Per Frame' },
           { num: '3', label: 'PCA Dimensions' },
-          { num: 'Real-Time', label: 'Audio Sync' },
-          { num: 'Interactive', label: '3D Rendering' },
+          { num: 'k=5', label: 'kNN Cosine Similarity' },
+          { num: '13+', label: 'Bird Species Mapped' },
         ],
       },
       {
@@ -652,14 +662,14 @@ ES Modules — Frontend architecture`,
       {
         type: 'text',
         content: `<strong>Short Version (30 seconds)</strong>
-"I built a machine learning visualization project that converts birdsong into a 3D interactive animation. The system extracts 57 audio features from bird calls, reduces them into 3 dimensions using PCA, and visualizes the result in real time using Three.js. It combines audio DSP, machine learning, and frontend graphics into a single pipeline."
+"I built an interactive 3D acoustic manifold that visualizes bird vocalisations. It extracts 57 MFCC features per audio frame, reduces them to 3 dimensions via PCA, and renders the result as an animated trajectory in Three.js. It also classifies uploaded recordings using kNN and answers questions about each species through a Llama 3.1 AI assistant."
 
 <strong>Medium Version (Interview Style)</strong>
-"The project started as an experiment in turning sound into geometry. I used Python and librosa to extract 57 audio features from birdsong recordings frame-by-frame. Since that data is high-dimensional, I used PCA with scikit-learn to reduce it into 3 dimensions while preserving the most important patterns in the audio.
+"The project started as an experiment in turning sound into geometry. I used Python and librosa to extract 57-dimensional MFCC feature vectors from birdsong recordings frame-by-frame. Since that data is high-dimensional, I applied PCA to reduce it into 3 principal components — representing timbre, texture, and spectral range — while preserving the most important acoustic variation.
 
-I then built a Three.js visualization that renders the PCA output as a moving comet trail synchronized to the original audio. One interesting engineering challenge was keeping the animation synced with playback efficiently, so I implemented a binary-search frame mapping system for real-time lookup.
+The reduced data is served through a FastAPI backend and rendered as a comet-trail animation in Three.js. I also built a kNN classifier (cosine similarity, k=5) that can identify species from uploaded audio, and integrated a Groq-powered Llama 3.1 assistant for natural-language conversations about each bird.
 
-What makes the project interesting is that it connects the entire pipeline — signal processing, machine learning, dimensionality reduction, and interactive visualization — into a single working system."`,
+The full stack spans audio DSP, machine learning, REST API design, real-time 3D rendering, and LLM integration — all connected in a single end-to-end system."`,
       },
       {
         type: 'section',
@@ -669,17 +679,18 @@ What makes the project interesting is that it connects the entire pipeline — s
         type: 'text',
         content: `This project is a strong differentiator because it combines:
 
-• Machine learning
-• Audio processing
-• Data visualization
-• Real-time rendering
-• Frontend + backend integration
-• Mathematical modeling
+• Audio DSP and MFCC feature extraction
+• PCA dimensionality reduction and manifold mapping
+• kNN classification for species identification
+• Real-time Three.js 3D rendering
+• FastAPI backend architecture
+• LLM integration (Groq + Llama 3.1)
+• Full-stack deployment (GitHub Pages + Render)
 
-Most projects focus on only one of these areas. This one demonstrates the ability to connect them end-to-end.`,
+Most projects focus on only one of these areas. This one demonstrates the ability to connect them all — from raw audio to interactive 3D visualization to conversational AI — in a single end-to-end system.`,
       },
     ],
-    techStack: ['Python', 'librosa', 'scikit-learn', 'PCA', 'NumPy', 'Three.js', 'WebGL'],
+    techStack: ['Python', 'librosa', 'scikit-learn', 'FastAPI', 'Three.js', 'Groq', 'Llama 3.1', 'PCA', 'kNN', 'NumPy', 'Render', 'GitHub Pages'],
     images: [],
   },
   {
