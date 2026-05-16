@@ -97,6 +97,7 @@ export default function ProjectsPage() {
         title={selectedProject?.title || ''}
         sections={selectedProject?.sections || []}
         link={selectedProject?.link}
+        githubLink={selectedProject?.githubLink}
       />
 
       <Footer isDark={isDark} text={text} borderColor={borderColor} />
