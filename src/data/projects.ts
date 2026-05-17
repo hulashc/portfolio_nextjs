@@ -31,6 +31,14 @@ export interface Decision {
   description: string;
 }
 
+export interface TimelineEntry {
+  year: string;
+  title: string;
+  category: string;
+  ghostText: string;
+  imageUrl: string;
+}
+
 export interface CostSection {
   title: string;
   items: string[];
@@ -56,7 +64,8 @@ export type SectionType =
   | { type: 'videos'; sources: string[] }
   | { type: 'embed'; url: string; height?: string }
   | { type: 'paper-button'; label: string; url: string }
-  | { type: 'art-viewer' };
+  | { type: 'art-viewer' }
+  | { type: 'timeline'; entries: TimelineEntry[] };
 
 export interface Project {
   id: string;
@@ -945,42 +954,68 @@ The full source is available on GitHub.`,
     images: [],
     videos: ['/videos/argestures.mp4'],
   },
+
   {
-    id: 'real-time-financial-analytics',
-    title: 'Real-Time Financial Analytics',
-    excerpt: 'Real-time financial analytics platform processing millions of daily transactions — streaming data from market feeds and trade execution systems for risk management.',
+    id: 'star-wars-timeline',
+    title: 'Star Wars: Timeline of the Galaxy',
+    flagship: true,
+    excerpt: 'A comprehensive interactive timeline organizing Star Wars comics and books from both Legends and Canon continuities — spanning from the Dawn of the Jedi to the far future of Legacy.',
+    link: 'https://github.com/hulashc/star-wars-timeline',
     sections: [
       {
-        type: 'text',
-        content: `Built a comprehensive real-time financial analytics platform that processes millions of transactions daily, providing actionable insights for trading desks and risk management teams.
-
-The system handles streaming data from multiple sources including market feeds, trade execution systems, and regulatory reporting channels. Low-latency processing ensures traders receive up-to-the-second market intelligence.
-
-Key features include real-time risk calculations, portfolio performance monitoring, anomaly detection using machine learning, and automated alerting for threshold breaches.`,
+        type: 'hero',
+        subtitle: 'An interactive timeline mapping the Star Wars expanded universe across both Legends and Canon — from the Dawn of the Jedi (25,000 BBY) to the Final Order (35 ABY).',
       },
-    ],
-    techStack: ['Kafka', 'Spark Streaming', 'AWS', 'PostgreSQL', 'Python', 'TensorFlow'],
-    images: [],
-    videos: [],
-    link: 'https://github.com/hchand',
-  },
-  {
-    id: 'generative-ai-data-pipeline',
-    title: 'Generative AI Data Pipeline',
-    excerpt: 'Scalable RAG data pipeline for LLMs — automated ingestion, chunking, embedding generation, and vector search to provide accurate enterprise context.',
-    sections: [
+      {
+        type: 'timeline',
+        entries: [
+          { year: '25,000 BBY', title: 'Dawn of the Republic', category: 'ORIGINS', ghostText: 'DAWN OF THE REPUBLIC', imageUrl: 'https://picsum.photos/seed/starwars1/1200/800' },
+          { year: '7,000 BBY', title: 'The Great Hyperspace War', category: 'CONFLICT', ghostText: 'THE GREAT HYPERSPACE WAR', imageUrl: 'https://picsum.photos/seed/starwars2/1200/800' },
+          { year: '3,956 BBY', title: 'Knights of the Old Republic', category: 'LEGENDS', ghostText: 'KNIGHTS OF THE OLD REPUBLIC', imageUrl: 'https://picsum.photos/seed/starwars3/1200/800' },
+          { year: '1,000 BBY', title: 'Darth Bane & the Rule of Two', category: 'SITH', ghostText: 'DARTH BANE & THE RULE OF TWO', imageUrl: 'https://picsum.photos/seed/starwars4/1200/800' },
+          { year: '32 BBY', title: 'The Phantom Menace', category: 'PROJECTS', ghostText: 'THE PHANTOM MENACE', imageUrl: 'https://picsum.photos/seed/starwars5/1200/800' },
+          { year: '19 BBY', title: 'Order 66 & Fall of the Jedi', category: 'TRAGEDY', ghostText: 'ORDER 66 & FALL OF THE JEDI', imageUrl: 'https://picsum.photos/seed/starwars6/1200/800' },
+          { year: '0 BBY', title: 'The Battle of Yavin', category: 'REBELLION', ghostText: 'THE BATTLE OF YAVIN', imageUrl: 'https://picsum.photos/seed/starwars7/1200/800' },
+          { year: '4 ABY', title: 'Return of the Jedi', category: 'VICTORY', ghostText: 'RETURN OF THE JEDI', imageUrl: 'https://picsum.photos/seed/starwars8/1200/800' },
+          { year: '34 ABY', title: 'The Rise of the First Order', category: 'THREAT', ghostText: 'THE RISE OF THE FIRST ORDER', imageUrl: 'https://picsum.photos/seed/starwars9/1200/800' },
+          { year: '35 ABY', title: 'The Final Order Falls', category: 'LEGACY', ghostText: 'THE FINAL ORDER FALLS', imageUrl: 'https://picsum.photos/seed/starwars10/1200/800' },
+        ],
+      },
+      {
+        type: 'section',
+        title: 'Skills & Technologies',
+      },
+      {
+        type: 'skill-badges',
+        items: [
+          { text: 'Timeline Visualization', highlight: true },
+          { text: 'Data Modeling & Curation', highlight: true },
+          { text: 'Dual-Continuity Architecture', highlight: true },
+          { text: 'Responsive Web Design', highlight: true },
+          { text: 'Search & Filtering', highlight: true },
+          { text: 'JSON Schema Design', highlight: true },
+          { text: 'D3.js', highlight: true },
+          { text: 'React + TypeScript', highlight: true },
+        ],
+      },
+      {
+        type: 'section',
+        title: 'Tech Stack',
+      },
       {
         type: 'text',
-        content: `Designed and implemented a scalable data pipeline for generative AI applications, enabling efficient processing and retrieval of contextual information for large language models.
-
-The pipeline implements a RAG (Retrieval Augmented Generation) architecture, combining vector search with traditional data processing to provide LLMs with accurate, up-to-date context from enterprise knowledge bases.
-
-Features include automated data ingestion, chunking and embedding generation, vector storage with approximate nearest neighbor search, and real-time index updates for dynamic content.`,
+        content: `React — UI framework
+TypeScript — Type safety & data modeling
+D3.js — Timeline visualization & zoom/pan
+Fuse.js — Fuzzy search across entries
+Vite — Build tool & dev server
+JSON Schema — Structured entry data model
+CSS Scroll Snap — Timeline scrolling
+GitHub Pages — Frontend hosting`,
       },
     ],
-    techStack: ['LLM APIs', 'RAG', 'Python', 'AWS Lambda', 'Pinecone', 'LangChain'],
+    techStack: ['React', 'TypeScript', 'D3.js', 'Fuse.js', 'Vite', 'JSON Schema', 'CSS Scroll Snap', 'GitHub Pages'],
     images: [],
     videos: [],
-    link: 'https://github.com/hchand',
   },
 ];

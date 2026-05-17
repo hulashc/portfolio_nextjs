@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useCallback, useRef } from 'react';
+import { useEffect, useCallback, useRef, useState } from 'react';
 import { useTheme } from './ThemeProvider';
-import { SectionType, ProjectStat, SkillBadge, ArchitectureCard, Phase, Decision, CostSection, RecruiterCard } from '@/data/projects';
+import { SectionType, ProjectStat, SkillBadge, ArchitectureCard, Phase, Decision, CostSection, RecruiterCard, TimelineEntry } from '@/data/projects';
 import VanGoghArtViewer from './VanGoghArtViewer';
+import RolodexScroll from './RolodexScroll';
 
 interface DetailPopupProps {
   isOpen: boolean;
@@ -17,6 +18,8 @@ interface DetailPopupProps {
 export default function DetailPopup({ isOpen, onClose, title, sections, link, githubLink }: DetailPopupProps) {
   const { isDark } = useTheme();
   const backdropRef = useRef<HTMLDivElement>(null);
+  const [timelinePage, setTimelinePage] = useState(0);
+  const [flipDir, setFlipDir] = useState<'next' | 'prev' | null>(null);
 
   const borderColor = isDark ? 'rgba(255,255,240,0.7)' : 'rgba(0,0,0,0.6)';
   const popupBg = isDark ? '#161616' : '#DADADA';
@@ -414,6 +417,9 @@ export default function DetailPopup({ isOpen, onClose, title, sections, link, gi
         );
       case 'art-viewer':
         return <VanGoghArtViewer key={index} />;
+      case 'timeline':
+        const timelineEntries = (section as { type: 'timeline'; entries: TimelineEntry[] }).entries;
+        return <RolodexScroll key={index} items={timelineEntries.map(e => ({ image: e.imageUrl, title: e.title, year: e.year, category: e.category }))} />;
       default:
         return null;
     }
