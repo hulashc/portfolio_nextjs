@@ -114,6 +114,7 @@ export const projects: Project[] = [
 📊 Confidence intervals — every prediction includes an 80% CI band
 🚨 Drift detection — PSI-based feature drift monitoring with per-field warning badges
 🔄 CI/CD pipeline — GitHub Actions trains the model, builds the Docker image, pushes to GHCR, and deploys to Render on every push to main
+✅ Automated tests — pytest runs in CI before build; /health verified post-deploy
 🧠 Smart caching — Redis (with in-memory fallback) caches weather API responses for 1 hour
 📈 Prometheus metrics — /metrics endpoint for Grafana integration`,
       },
@@ -239,7 +240,7 @@ Fallback chain: Redis cache → Live API → In-memory cache → UK seasonal def
 ├── training/
 │   ├── train_and_export.py        # XGBoost training script
 │   └── utils/features.py          # Canonical FEATURE_COLS
-├── monitoring/drift.py            # PSI drift detector
+├── monitoring/psi_detector.py     # PSI drift detector
 ├── generate_data.py               # Synthetic UK agricultural data generator
 ├── Dockerfile.prod                # Production image (bakes model.pkl)
 └── pyproject.toml`,
@@ -260,13 +261,19 @@ Fallback chain: Redis cache → Live API → In-memory cache → UK seasonal def
 [2] Train XGBoost → save model.pkl
   │
   ▼
-[3] docker build -f Dockerfile.prod (bakes model.pkl in)
+[3] Run pytest (feature cols, temporal split, metrics)
   │
   ▼
-[4] docker push ghcr.io/hulashc/agri-yield:latest
+[4] docker build -f Dockerfile.prod (bakes model.pkl + git SHA version)
   │
   ▼
-[5] curl RENDER_DEPLOY_HOOK → Render redeploys`,
+[5] docker push ghcr.io/hulashc/agri-yield:latest
+  │
+  ▼
+[6] curl RENDER_DEPLOY_HOOK → Render redeploys
+  │
+  ▼
+[7] Poll /health until 200 → verify deploy succeeded`,
       },
       {
         type: 'section',
@@ -280,7 +287,7 @@ Fallback chain: Redis cache → Live API → In-memory cache → UK seasonal def
             num: '01',
             badge: 'Non-negotiable',
             title: 'Temporal train/test splitting',
-            description: 'Any shuffle-based split in this pipeline is a bug. Yield data has strong temporal autocorrelation — shuffling leaks future harvest seasons into training, inflating every metric while the deployed model silently fails. Uses standard 80/20 split with time-aware ordering.',
+            description: 'Any shuffle-based split in this pipeline is a bug. Yield data has strong temporal autocorrelation — shuffling leaks future harvest seasons into training, inflating every metric while the deployed model silently fails. Uses temporal 80/20 split sorted by week — no shuffle, no future leakage.',
           },
           {
             num: '02',
@@ -367,29 +374,6 @@ Fallback chain: Redis cache → Live API → In-memory cache → UK seasonal def
       },
     ],
     techStack: ['XGBoost', 'FastAPI', 'Docker', 'GitHub Actions', 'Leaflet.js', 'Redis', 'Prometheus', 'Open-Meteo API', 'Render'],
-    images: [],
-    videos: [],
-  },
-  {
-    id: 'leet-journey',
-    title: 'Leet Journey',
-    excerpt: 'A living collection of LeetCode problem-solving notes — documenting patterns, approaches, and the thinking process behind each solution.',
-    link: 'https://notes.hulash.com',
-    sections: [
-      {
-        type: 'hero',
-        subtitle: 'My LeetCode problem-solving journey. Notes on patterns, approaches, and solutions — written as I learn, not after I already know.',
-      },
-      {
-        type: 'text',
-        content: `This is a living collection of my LeetCode notes — not polished tutorials, but honest documentation of how I think through problems. Each note captures the problem-solving process: the approach I tried, the underlying pattern, optimizations, mistakes, and where I got stuck before arriving at a solution. The goal is to build deeper intuition for data structures and algorithms through consistent practice and reflection.
-
-The project is built using <a href="https://quartz.jzhao.xyz/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">Quartz v4</a>, an open-source framework for publishing digital gardens and interconnected notes. Inspired by the Obsidian-style note-taking workflow, the site functions as a searchable knowledge base where ideas, patterns, and problem categories are linked together over time.
-
-Alongside algorithm practice, the project also helped me explore static site generation, markdown-based content systems, note-linking architectures, and developer-focused documentation workflows.`,
-      },
-    ],
-    techStack: ['Quartz v4', 'LeetCode', 'Data Structures', 'Algorithms', 'Patterns', 'Markdown', 'Static Site'],
     images: [],
     videos: [],
   },
@@ -703,162 +687,6 @@ Most projects focus on only one of these areas. This one demonstrates the abilit
     images: [],
   },
   {
-    id: 'real-time-fraud-detection',
-    title: 'Real-Time Fraud Detection Pipeline',
-    excerpt: 'Streaming fraud detection that processes financial transactions in real time via Apache Kafka with rule-based detection and a live Streamlit dashboard.',
-    link: 'https://github.com/hulashc/Real-Time-Fraud-Detection-Pipeline',
-    sections: [
-      {
-        type: 'hero',
-        subtitle: 'A streaming fraud detection system that processes financial transactions in real time using Apache Kafka, applies rule-based detection, and visualises everything on an interactive live dashboard built with Streamlit and Plotly.',
-      },
-      {
-        type: 'skill-badges',
-        items: [
-          { text: 'Python', highlight: true },
-          { text: 'Apache Kafka', highlight: true },
-          { text: 'Docker', highlight: true },
-          { text: 'Streamlit', highlight: true },
-          { text: 'Plotly' },
-          { text: 'Pandas' },
-          { text: 'KRaft Mode' },
-        ],
-      },
-      {
-        type: 'section',
-        title: 'System Architecture',
-      },
-      {
-        type: 'architecture-cards',
-        items: [
-          {
-            icon: '⚡',
-            title: 'Producer',
-            description: 'Python script generates realistic financial transactions — 8% intentionally suspicious.',
-            stack: ['Python'],
-            color: '#e07a3a',
-          },
-          {
-            icon: '📦',
-            title: 'Kafka',
-            description: 'Apache Kafka 3.8 in KRaft consensus mode via Docker — no Zookeeper, faster startup.',
-            stack: ['Kafka', 'KRaft', 'Docker'],
-            color: '#a86fdf',
-          },
-          {
-            icon: '🔍',
-            title: 'Consumer',
-            description: 'Reads the stream, applies multi-signal fraud rules, and flags risky activity.',
-            stack: ['Python', 'Pandas'],
-            color: '#4eaa78',
-          },
-          {
-            icon: '📄',
-            title: 'CSV Store',
-            description: 'Results are persisted to CSV for dashboard consumption and historical analysis.',
-            stack: ['CSV', 'Pandas'],
-            color: '#6ba3e0',
-          },
-          {
-            icon: '🌐',
-            title: 'Dashboard',
-            description: 'Streamlit-powered live dashboard that auto-refreshes every 2 seconds with Plotly charts.',
-            stack: ['Streamlit', 'Plotly'],
-            color: '#dd6974',
-          },
-        ],
-      },
-      {
-        type: 'section',
-        title: 'How It Works',
-        content: 'From stream to insight in milliseconds',
-      },
-      {
-        type: 'text',
-        content: `The pipeline starts with a producer generating realistic financial transactions — 8% are intentionally suspicious. Each transaction flows through Apache Kafka running in KRaft mode (no Zookeeper), where a consumer reads the stream, applies multi-signal fraud rules, and flags risky activity. Results are persisted to a CSV and visualised on a live Streamlit dashboard that auto-refreshes every 2 seconds.`,
-      },
-      {
-        type: 'section',
-        title: 'Key Features',
-      },
-      {
-        type: 'text',
-        content: `⚡ Real-Time Streaming — Transactions are generated and consumed in real time via Apache Kafka. No batch processing — every transaction is analysed as it arrives.
-🔎 Rule-Based Detection — Multi-signal fraud detection using transaction amount, time of day, and geographic location. Flags trigger when 2+ rules fire simultaneously.
-🎨 Interactive Dashboard — Streamlit-powered dashboard with risk gauges, heatmaps, sunburst charts, and live transaction feeds — all auto-refreshing.
-📦 KRaft-Mode Kafka — Runs Apache Kafka 3.8 in KRaft consensus mode via Docker — no Zookeeper dependency, faster startup, simpler architecture.
-🔧 One-Click Deploy — Start and stop the entire stack with batch scripts. Four components spin up in separate windows automatically.
-📊 Rich Visualisations — Plotly-powered charts including spline timelines, fraud heatmaps, sunburst breakdowns, overlapping histograms, and horizontal risk rankings.`,
-      },
-      {
-        type: 'section',
-        title: 'Detection Logic',
-        content: 'How fraud is identified — a transaction is flagged when it triggers two or more rules simultaneously.',
-      },
-      {
-        type: 'decisions',
-        items: [
-          {
-            num: '01',
-            badge: 'Rule',
-            title: 'High Amount > $4,000',
-            description: 'Unusually large transactions are a common fraud indicator. Flags any single transaction exceeding the $4,000 threshold.',
-          },
-          {
-            num: '02',
-            badge: 'Rule',
-            title: 'Unusual Hour (11 PM – 6 AM)',
-            description: 'Transactions outside standard business hours carry higher risk. This rule captures activity during low-oversight windows.',
-          },
-          {
-            num: '03',
-            badge: 'Rule',
-            title: 'Risky Location',
-            description: 'Transactions originating from Lagos, Moscow, or Unknown locations — regions with elevated fraud patterns in the dataset.',
-          },
-        ],
-      },
-      {
-        type: 'section',
-        title: 'Dashboard Preview',
-        content: 'The Streamlit dashboard auto-refreshes every 2 seconds with real-time metrics, interactive charts, and fraud alerts.',
-      },
-      {
-        type: 'stats',
-        items: [
-          { num: '342', label: 'Transactions Monitored' },
-          { num: '23', label: 'Fraud Detected' },
-          { num: '6.8%', label: 'Fraud Rate' },
-          { num: '$284K', label: 'Total Volume' },
-          { num: '$831', label: 'Avg Transaction' },
-        ],
-      },
-      {
-        type: 'text',
-        content: `⚠️ HIGH ALERT — 6.8% fraud rate detected across 342 transactions
-
-Transaction Stream — ● Legitimate ● Fraudulent
-
-Fraud Heatmap by Hour & Location — Lagos, Moscow, Unknown locations show concentrated fraud patterns across late-night and early-morning hours.
-
-Top Risky Users:
-USER-2847 — $18,400
-USER-1193 — $14,250
-USER-5521 — $11,800
-USER-3390 — $8,600
-USER-7762 — $5,300
-
-Recent Fraud Alerts:
-● Critical — TXN-482931 | USER-2847 | $12,450 | transfer | Lagos | high_amount, unusual_hour, risky_location
-● High — TXN-330185 | USER-1193 | $8,200 | withdrawal | Moscow | high_amount, risky_location
-● High — TXN-771204 | USER-5521 | $6,750 | purchase | Unknown | high_amount, risky_location`,
-      },
-    ],
-    techStack: ['Python', 'Apache Kafka', 'Docker', 'Streamlit', 'Plotly', 'Pandas', 'KRaft'],
-    images: [],
-    videos: [],
-  },
-  {
     id: 'ar-gesture-menu',
     title: 'AR Gesture-Controlled Menu System',
     excerpt: 'Touchless computer interaction using hand gestures via a standard webcam — MediaPipe hand tracking, gesture recognition, and AR overlay rendering.',
@@ -1015,6 +843,185 @@ GitHub Pages — Frontend hosting`,
       },
     ],
     techStack: ['React', 'TypeScript', 'D3.js', 'Fuse.js', 'Vite', 'JSON Schema', 'CSS Scroll Snap', 'GitHub Pages'],
+    images: [],
+    videos: [],
+  },
+  {
+    id: 'real-time-fraud-detection',
+    title: 'Real-Time Fraud Detection Pipeline',
+    excerpt: 'Streaming fraud detection that processes financial transactions in real time via Apache Kafka with rule-based detection and a live Streamlit dashboard.',
+    link: 'https://github.com/hulashc/Real-Time-Fraud-Detection-Pipeline',
+    sections: [
+      {
+        type: 'hero',
+        subtitle: 'A streaming fraud detection system that processes financial transactions in real time using Apache Kafka, applies rule-based detection, and visualises everything on an interactive live dashboard built with Streamlit and Plotly.',
+      },
+      {
+        type: 'skill-badges',
+        items: [
+          { text: 'Python', highlight: true },
+          { text: 'Apache Kafka', highlight: true },
+          { text: 'Docker', highlight: true },
+          { text: 'Streamlit', highlight: true },
+          { text: 'Plotly' },
+          { text: 'Pandas' },
+          { text: 'KRaft Mode' },
+        ],
+      },
+      {
+        type: 'section',
+        title: 'System Architecture',
+      },
+      {
+        type: 'architecture-cards',
+        items: [
+          {
+            icon: '⚡',
+            title: 'Producer',
+            description: 'Python script generates realistic financial transactions — 8% intentionally suspicious.',
+            stack: ['Python'],
+            color: '#e07a3a',
+          },
+          {
+            icon: '📦',
+            title: 'Kafka',
+            description: 'Apache Kafka 3.8 in KRaft consensus mode via Docker — no Zookeeper, faster startup.',
+            stack: ['Kafka', 'KRaft', 'Docker'],
+            color: '#a86fdf',
+          },
+          {
+            icon: '🔍',
+            title: 'Consumer',
+            description: 'Reads the stream, applies multi-signal fraud rules, and flags risky activity.',
+            stack: ['Python', 'Pandas'],
+            color: '#4eaa78',
+          },
+          {
+            icon: '📄',
+            title: 'CSV Store',
+            description: 'Results are persisted to CSV for dashboard consumption and historical analysis.',
+            stack: ['CSV', 'Pandas'],
+            color: '#6ba3e0',
+          },
+          {
+            icon: '🌐',
+            title: 'Dashboard',
+            description: 'Streamlit-powered live dashboard that auto-refreshes every 2 seconds with Plotly charts.',
+            stack: ['Streamlit', 'Plotly'],
+            color: '#dd6974',
+          },
+        ],
+      },
+      {
+        type: 'section',
+        title: 'How It Works',
+        content: 'From stream to insight in milliseconds',
+      },
+      {
+        type: 'text',
+        content: `The pipeline starts with a producer generating realistic financial transactions — 8% are intentionally suspicious. Each transaction flows through Apache Kafka running in KRaft mode (no Zookeeper), where a consumer reads the stream, applies multi-signal fraud rules, and flags risky activity. Results are persisted to a CSV and visualised on a live Streamlit dashboard that auto-refreshes every 2 seconds.`,
+      },
+      {
+        type: 'section',
+        title: 'Key Features',
+      },
+      {
+        type: 'text',
+        content: `⚡ Real-Time Streaming — Transactions are generated and consumed in real time via Apache Kafka. No batch processing — every transaction is analysed as it arrives.
+🔎 Rule-Based Detection — Multi-signal fraud detection using transaction amount, time of day, and geographic location. Flags trigger when 2+ rules fire simultaneously.
+🎨 Interactive Dashboard — Streamlit-powered dashboard with risk gauges, heatmaps, sunburst charts, and live transaction feeds — all auto-refreshing.
+📦 KRaft-Mode Kafka — Runs Apache Kafka 3.8 in KRaft consensus mode via Docker — no Zookeeper dependency, faster startup, simpler architecture.
+🔧 One-Click Deploy — Start and stop the entire stack with batch scripts. Four components spin up in separate windows automatically.
+📊 Rich Visualisations — Plotly-powered charts including spline timelines, fraud heatmaps, sunburst breakdowns, overlapping histograms, and horizontal risk rankings.`,
+      },
+      {
+        type: 'section',
+        title: 'Detection Logic',
+        content: 'How fraud is identified — a transaction is flagged when it triggers two or more rules simultaneously.',
+      },
+      {
+        type: 'decisions',
+        items: [
+          {
+            num: '01',
+            badge: 'Rule',
+            title: 'High Amount > $4,000',
+            description: 'Unusually large transactions are a common fraud indicator. Flags any single transaction exceeding the $4,000 threshold.',
+          },
+          {
+            num: '02',
+            badge: 'Rule',
+            title: 'Unusual Hour (11 PM – 6 AM)',
+            description: 'Transactions outside standard business hours carry higher risk. This rule captures activity during low-oversight windows.',
+          },
+          {
+            num: '03',
+            badge: 'Rule',
+            title: 'Risky Location',
+            description: 'Transactions originating from Lagos, Moscow, or Unknown locations — regions with elevated fraud patterns in the dataset.',
+          },
+        ],
+      },
+      {
+        type: 'section',
+        title: 'Dashboard Preview',
+        content: 'The Streamlit dashboard auto-refreshes every 2 seconds with real-time metrics, interactive charts, and fraud alerts.',
+      },
+      {
+        type: 'stats',
+        items: [
+          { num: '342', label: 'Transactions Monitored' },
+          { num: '23', label: 'Fraud Detected' },
+          { num: '6.8%', label: 'Fraud Rate' },
+          { num: '$284K', label: 'Total Volume' },
+          { num: '$831', label: 'Avg Transaction' },
+        ],
+      },
+      {
+        type: 'text',
+        content: `⚠️ HIGH ALERT — 6.8% fraud rate detected across 342 transactions
+
+Transaction Stream — ● Legitimate ● Fraudulent
+
+Fraud Heatmap by Hour & Location — Lagos, Moscow, Unknown locations show concentrated fraud patterns across late-night and early-morning hours.
+
+Top Risky Users:
+USER-2847 — $18,400
+USER-1193 — $14,250
+USER-5521 — $11,800
+USER-3390 — $8,600
+USER-7762 — $5,300
+
+Recent Fraud Alerts:
+● Critical — TXN-482931 | USER-2847 | $12,450 | transfer | Lagos | high_amount, unusual_hour, risky_location
+● High — TXN-330185 | USER-1193 | $8,200 | withdrawal | Moscow | high_amount, risky_location
+● High — TXN-771204 | USER-5521 | $6,750 | purchase | Unknown | high_amount, risky_location`,
+      },
+    ],
+    techStack: ['Python', 'Apache Kafka', 'Docker', 'Streamlit', 'Plotly', 'Pandas', 'KRaft'],
+    images: [],
+    videos: [],
+  },
+  {
+    id: 'leet-journey',
+    title: 'Leet Journey',
+    excerpt: 'A living collection of LeetCode problem-solving notes — documenting patterns, approaches, and the thinking process behind each solution.',
+    link: 'https://notes.hulash.com',
+    sections: [
+      {
+        type: 'hero',
+        subtitle: 'My LeetCode problem-solving journey. Notes on patterns, approaches, and solutions — written as I learn, not after I already know.',
+      },
+      {
+        type: 'text',
+        content: `This is a living collection of my LeetCode notes — not polished tutorials, but honest documentation of how I think through problems. Each note captures the problem-solving process: the approach I tried, the underlying pattern, optimizations, mistakes, and where I got stuck before arriving at a solution. The goal is to build deeper intuition for data structures and algorithms through consistent practice and reflection.
+
+The project is built using <a href="https://quartz.jzhao.xyz/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">Quartz v4</a>, an open-source framework for publishing digital gardens and interconnected notes. Inspired by the Obsidian-style note-taking workflow, the site functions as a searchable knowledge base where ideas, patterns, and problem categories are linked together over time.
+
+Alongside algorithm practice, the project also helped me explore static site generation, markdown-based content systems, note-linking architectures, and developer-focused documentation workflows.`,
+      },
+    ],
+    techStack: ['Quartz v4', 'LeetCode', 'Data Structures', 'Algorithms', 'Patterns', 'Markdown', 'Static Site'],
     images: [],
     videos: [],
   },
