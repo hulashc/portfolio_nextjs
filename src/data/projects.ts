@@ -109,7 +109,7 @@ export const projects: Project[] = [
       {
         type: 'text',
         content: `🗺️ Interactive UK field map — 113 fields coloured by predicted yield (red → green)
-🤖 XGBoost yield model — trained on synthetic UK agricultural data, baked into the Docker image at CI time
+🤖 XGBoost yield model — trained on real UK yield data (CYCleSS, 934 fields) or synthetic fallback, baked into the Docker image at CI time
 🌤️ Live weather integration — Open-Meteo API fetches real-time temperature, precipitation, and solar radiation per field
 📊 Confidence intervals — every prediction includes an 80% CI band
 🚨 Drift detection — PSI-based feature drift monitoring with per-field warning badges
@@ -151,7 +151,7 @@ export const projects: Project[] = [
           {
             icon: '🤖',
             title: 'ML Model',
-            description: 'XGBoost Regressor trained on synthetic UK agricultural data. Features include lat, lon, area, crop type, soil type, region, weather vars, ET₀, soil moisture, NDVI, and week of year. RMSE ~500-800 kg/ha.',
+            description: 'XGBoost Regressor trained on real UK yield data (CYCleSS, 934 field-year records). Features include lat, lon, area, crop type, soil type, region, weather vars, ET₀, soil moisture, NDVI, and week of year. RMSE ~1759 kg/ha on holdout.',
             stack: ['XGBoost', 'scikit-learn', 'pandas', 'NumPy'],
             color: '#4eaa78',
           },
@@ -203,7 +203,7 @@ export const projects: Project[] = [
 Target: yield_kg_per_ha
 Features: lat, lon, area, crop type, soil type, region, temperature, precipitation, solar radiation, ET₀, soil moisture, NDVI, week of year
 Train/test split: 80/20
-RMSE: ~500-800 kg/ha (synthetic data)
+RMSE: ~1759 kg/ha (real CYCleSS data); ~1724 kg/ha (synthetic fallback)
 Confidence interval: ±15% of prediction (configurable via CI_WIDTH env var)
 
 The model is retrained from scratch on every CI run. The trained model.pkl is baked directly into the production Docker image — no stale artefacts, no manual uploads.`,
@@ -238,10 +238,12 @@ Fallback chain: Redis cache → Live API → In-memory cache → UK seasonal def
 │   ├── model.py                   # Model loader + predict()
 │   └── static/                    # Dashboard HTML/CSS/JS
 ├── training/
-│   ├── train_and_export.py        # XGBoost training script
+│   ├── train_and_export.py        # XGBoost training (real-data first, fallback to synthetic)
+│   ├── prepare_real_data.py       # CYCleSS real data ingestion
 │   └── utils/features.py          # Canonical FEATURE_COLS
 ├── monitoring/psi_detector.py     # PSI drift detector
-├── generate_data.py               # Synthetic UK agricultural data generator
+├── training/prepare_real_data.py  # Real UK yield data pipeline (CYCleSS)
+├── generate_data.py               # Synthetic data generator (fallback)
 ├── Dockerfile.prod                # Production image (bakes model.pkl)
 └── pyproject.toml`,
       },
@@ -255,7 +257,7 @@ Fallback chain: Redis cache → Live API → In-memory cache → UK seasonal def
         content: `push to main
   │
   ▼
-[1] Generate synthetic training data
+[1] Generate training data (real CYCleSS or synthetic fallback)
   │
   ▼
 [2] Train XGBoost → save model.pkl
