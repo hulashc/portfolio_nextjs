@@ -7,11 +7,12 @@ import { blogs, Blog } from '@/data/blogs';
 import DetailPopup from './DetailPopup';
 
 interface CarouselItem {
-  type: 'project' | 'blog';
+  type: 'hero' | 'project' | 'blog';
   id: string;
   title: string;
   tech: string;
-  data: Project | Blog;
+  data?: Project | Blog;
+  imageSrc?: string;
 }
 
 const PIXEL_SIZE = 16;
@@ -37,10 +38,18 @@ export default function HeroAnimation() {
   currentRef.current = current;
   animatingRef.current = animating;
 
-  const allItems = useMemo<CarouselItem[]>(() => [
-    ...projects.filter(p => p.flagship).map(p => ({ type: 'project' as const, id: p.id, title: p.title, tech: p.techStack.slice(0, 3).join(' · '), data: p })),
-    ...blogs.filter(b => b.flagship).map(b => ({ type: 'blog' as const, id: b.id, title: b.title, tech: b.subtitle || '', data: b })),
-  ], []);
+  const allItems = useMemo<CarouselItem[]>(() => {
+    const heroItem: CarouselItem = {
+      type: 'hero',
+      id: 'hero-image',
+      title: 'Hero',
+      tech: '',
+      imageSrc: '/images/hero-image.png',
+    };
+    const projectItems = projects.filter(p => p.flagship).map(p => ({ type: 'project' as const, id: p.id, title: p.title, tech: p.techStack.slice(0, 3).join(' · '), data: p }));
+    const blogItems = blogs.filter(b => b.flagship).map(b => ({ type: 'blog' as const, id: b.id, title: b.title, tech: b.subtitle || '', data: b }));
+    return [heroItem, ...projectItems, ...blogItems];
+  }, []);
 
   const borderColor = isDark ? 'rgba(255,255,240,0.7)' : 'rgba(0,0,0,0.6)';
   const heroBg = isDark ? '#161616' : '#DADADA';
@@ -204,7 +213,7 @@ export default function HeroAnimation() {
     setIsSwiping(false);
     if (swipeDistance < 10) {
       const item = allItems[currentRef.current];
-      setSelectedItem(item.data);
+      if (item.data) setSelectedItem(item.data);
     } else if (swipeX < -80) {
       handleNext();
     } else if (swipeX > 80) {
@@ -252,67 +261,84 @@ export default function HeroAnimation() {
         onMouseUp={handlePointerUp}
         onMouseLeave={handlePointerCancel}
       >
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            transform: isSwiping ? `translateX(${swipeX}px)` : 'translateX(0)',
-            transition: isSwiping ? 'none' : 'transform 0.3s ease',
-            position: 'relative',
-            zIndex: 2,
-            pointerEvents: animating ? 'none' : 'auto',
-          }}
-        >
+        {item.type === 'hero' ? (
+          <img
+            src={item.imageSrc}
+            alt="Hero"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              zIndex: 1,
+              transform: isSwiping ? `translateX(${swipeX}px)` : 'translateX(0)',
+              transition: isSwiping ? 'none' : 'transform 0.3s ease',
+            }}
+          />
+        ) : (
           <div
             style={{
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              cursor: 'pointer',
-            }}
-            onClick={() => {
-              const i = allItems[currentRef.current];
-              setSelectedItem(i.data);
-            }}
-          >
-          <div
-            style={{
-              color: textColor,
-              fontSize: '0.75rem',
-              textTransform: 'uppercase',
-              letterSpacing: '0.2em',
-              marginBottom: '1rem',
-              opacity: 0.6,
+              justifyContent: 'center',
+              transform: isSwiping ? `translateX(${swipeX}px)` : 'translateX(0)',
+              transition: isSwiping ? 'none' : 'transform 0.3s ease',
+              position: 'relative',
+              zIndex: 2,
+              pointerEvents: animating ? 'none' : 'auto',
             }}
           >
-            {item.type}
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                const i = allItems[currentRef.current];
+                if (i.data) setSelectedItem(i.data);
+              }}
+            >
+            <div
+              style={{
+                color: textColor,
+                fontSize: '0.75rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.2em',
+                marginBottom: '1rem',
+                opacity: 0.6,
+              }}
+            >
+              {item.type}
+            </div>
+            <h2
+              style={{
+                color: textColor,
+                fontSize: 'clamp(1.25rem, 4vw, 2rem)',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                textAlign: 'center',
+                maxWidth: '80%',
+              }}
+            >
+              {item.title}
+            </h2>
+            <p
+              style={{
+                color: accentColor,
+                fontSize: 'clamp(0.75rem, 2vw, 1rem)',
+                marginTop: '0.75rem',
+                textAlign: 'center',
+              }}
+            >
+              {item.tech}
+            </p>
+            </div>
           </div>
-          <h2
-            style={{
-              color: textColor,
-              fontSize: 'clamp(1.25rem, 4vw, 2rem)',
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              textAlign: 'center',
-              maxWidth: '80%',
-            }}
-          >
-            {item.title}
-          </h2>
-          <p
-            style={{
-              color: accentColor,
-              fontSize: 'clamp(0.75rem, 2vw, 1rem)',
-              marginTop: '0.75rem',
-              textAlign: 'center',
-            }}
-          >
-            {item.tech}
-          </p>
-          </div>
-        </div>
+        )}
 
         <canvas
           ref={canvasRef}

@@ -144,7 +144,8 @@ export default function ActivityButton({ text, borderColor, isDark }: ActivityBu
 
       <style>{`
         .activity-btn:hover {
-          background: ${text}22 !important;
+          background: ${isDark ? "#DADADA" : "#161616"} !important;
+          color: ${isDark ? "#161616" : "#DADADA"} !important;
         }
         .active .activity-btn {
           min-width: 26rem !important;

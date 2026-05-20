@@ -3,6 +3,10 @@
 import { useTheme } from "./ThemeProvider";
 import dynamic from "next/dynamic";
 import Footer from "./Footer";
+import CardGallery from "./CardGallery";
+import TimelineSection from "./TimelineSection";
+import SkillsSection from "./SkillsSection";
+import CertificationsSection from "./CertificationsSection";
 
 const ActivityButton = dynamic(() => import("./ActivityButton"), { ssr: false });
 
@@ -25,88 +29,10 @@ export function AboutContent() {
           <ActivityButton text={text} borderColor={borderColor} isDark={isDark} />
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2" style={{ border: `1px solid ${borderColor}`, backgroundColor: bg }}>
-        <div className="p-3 md:p-4" style={{ borderRight: `1px solid ${borderColor}` }}>
-          <h3 className="text-2xl md:text-3xl font-bold uppercase mb-4 pb-2" style={{ color: text, borderBottom: `2px solid ${borderColor}` }}>Experience</h3>
-          <div className="space-y-4">
-            {[
-              { company: "Innowise Solutions", role: "AWS Consultant / Data Engineer", period: "2024 - Present" },
-              { company: "Outlier", role: "AI Prompt Consultant", period: "2024 - 2026" },
-              { company: "Education and Training Foundation", role: "Research and Teaching Assistant", period: "2023" },
-              { company: "Deloitte USI", role: "Automation Analyst", period: "2020 - 2021" },
-              { company: "Amazon", role: "Data Analyst", period: "2019" },
-              { company: "Qvantel", role: "People Analytics Intern", period: "2018 - 2019" },
-              { company: "Internshala", role: "Student Partner", period: "2017" },
-            ].map((exp, i) => (
-              <div key={i} className="flex justify-between items-start gap-4">
-                <div>
-                  <p className="text-sm md:text-lg font-bold" style={{ color: text }}>{exp.company}</p>
-                  <p className="text-sm" style={{ color: text }}>{exp.role}</p>
-                </div>
-                <p className="text-sm" style={{ color: text, whiteSpace: "nowrap" }}>{exp.period}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="p-3 md:p-4">
-          <h3 className="text-2xl md:text-3xl font-bold uppercase mb-4 pb-2" style={{ color: text, borderBottom: `2px solid ${borderColor}` }}>Education</h3>
-          <div className="space-y-4">
-            {[
-              { school: "University of Bristol", degree: "MSc Data Science with Financial Technology", period: "2022 - 2023" },
-              { school: "IIM Kozhikode", degree: "Data Science for ML & AI", period: "2021 - 2022" },
-              { school: "Deloitte University", degree: "Design Thinking & System Thinking", period: "2020 - 2021" },
-              { school: "ICFAI University", degree: "BBA Finance & Banking", period: "2016 - 2019" },
-            ].map((edu, i) => (
-              <div key={i} className="flex justify-between items-start gap-4">
-                <div>
-                  <p className="text-sm md:text-lg font-bold" style={{ color: text }}>{edu.school}</p>
-                  <p className="text-sm" style={{ color: text }}>{edu.degree}</p>
-                </div>
-                <p className="text-sm" style={{ color: text, whiteSpace: "nowrap" }}>{edu.period}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div style={{ border: `1px solid ${borderColor}` }} className="p-3 md:p-4">
-        <h3 className="text-2xl md:text-3xl font-bold uppercase mb-6 pb-2" style={{ color: text, borderBottom: `2px solid ${borderColor}` }}>Skills</h3>
-        <div className="space-y-3">
-          <div className="flex items-start gap-2">
-            <span className="text-xs md:text-sm font-bold uppercase tracking-wider whitespace-nowrap" style={{ color: text, opacity: 0.6, minWidth: "8rem" }}>Pipeline Orchestration</span>
-            <span className="text-xs md:text-sm" style={{ color: text }}>Airflow · Kafka · Spark · dbt</span>
-          </div>
-          <div className="flex items-start gap-2">
-            <span className="text-xs md:text-sm font-bold uppercase tracking-wider whitespace-nowrap" style={{ color: text, opacity: 0.6, minWidth: "8rem" }}>ML Deployment</span>
-            <span className="text-xs md:text-sm" style={{ color: text }}>MLflow · Docker · K8s · CI/CD</span>
-          </div>
-          <div className="flex items-start gap-2">
-            <span className="text-xs md:text-sm font-bold uppercase tracking-wider whitespace-nowrap" style={{ color: text, opacity: 0.6, minWidth: "8rem" }}>Cloud Infrastructure</span>
-            <span className="text-xs md:text-sm" style={{ color: text }}>AWS · Terraform · Serverless · GCP</span>
-          </div>
-          <div className="flex items-start gap-2">
-            <span className="text-xs md:text-sm font-bold uppercase tracking-wider whitespace-nowrap" style={{ color: text, opacity: 0.6, minWidth: "8rem" }}>LLM Applications</span>
-            <span className="text-xs md:text-sm" style={{ color: text }}>RAG · LangChain · Vector DBs · LLM APIs</span>
-          </div>
-          <div className="flex items-start gap-2">
-            <span className="text-xs md:text-sm font-bold uppercase tracking-wider whitespace-nowrap" style={{ color: text, opacity: 0.6, minWidth: "8rem" }}>Data Engineering</span>
-            <span className="text-xs md:text-sm" style={{ color: text }}>Python · SQL · PySpark · Snowflake · Delta</span>
-          </div>
-        </div>
-      </div>
-      <div style={{ border: `1px solid ${borderColor}` }} className="p-3 md:p-4">
-        <h3 className="text-2xl md:text-3xl font-bold uppercase mb-6 pb-2" style={{ color: text, borderBottom: `2px solid ${borderColor}` }}>Certifications</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <p className="text-sm md:text-base" style={{ color: text }}>AWS Certified Data Engineer – Associate</p>
-          <p className="text-sm md:text-base" style={{ color: text }}>AWS Certified Developer – Associate</p>
-          <p className="text-sm md:text-base" style={{ color: text }}>AWS Certified Cloud Practitioner</p>
-          <p className="text-sm md:text-base" style={{ color: text }}>Microsoft Certified: Azure Fundamentals (AZ-900)</p>
-          <p className="text-sm md:text-base" style={{ color: text }}>Anthropic - Model Context Protocol: Advanced Topics</p>
-          <p className="text-sm md:text-base" style={{ color: text }}>DataBricks - Fundamentals</p>
-          <p className="text-sm md:text-base" style={{ color: text }}>Tableau Certified Data Analyst</p>
-          <p className="text-sm md:text-base" style={{ color: text }}>MongoDB Certified Developer</p>
-          <p className="text-sm md:text-base" style={{ color: text }}>UK GDPR Practitioner Certificate · Online</p>
-        </div>
-      </div>
+      <TimelineSection isDark={isDark} text={text} borderColor={borderColor} />
+      <CardGallery isDark={isDark} text={text} borderColor={borderColor} />
+      <SkillsSection isDark={isDark} text={text} borderColor={borderColor} />
+      <CertificationsSection isDark={isDark} text={text} borderColor={borderColor} />
       <div style={{ border: `1px solid ${borderColor}` }} className="p-3 md:p-4">
         <h3 className="text-2xl md:text-3xl font-bold uppercase mb-6 pb-2" style={{ color: text, borderBottom: `2px solid ${borderColor}` }}>Volunteering</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
