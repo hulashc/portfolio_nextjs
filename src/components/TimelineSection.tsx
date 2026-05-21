@@ -63,7 +63,7 @@ export default function TimelineSection({ isDark, text, borderColor }: TimelineS
           observer.disconnect();
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.5 }
     );
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
@@ -151,18 +151,14 @@ export default function TimelineSection({ isDark, text, borderColor }: TimelineS
                 style={{
                   gridColumn: `${startCol} / ${endCol}`,
                   gridRow: `${i + 1}`,
-                  border: hasAnimated ? `1px solid ${borderColor}` : "1px solid transparent",
+                  border: `1px solid ${borderColor}`,
                   color: text,
-                  opacity: selected !== null && !isActive ? 0.35 : 1,
+                  opacity: hasAnimated ? (selected !== null && !isActive ? 0.35 : 1) : 0,
                   zIndex: isActive ? 10 : 1,
                   height: "36px",
                   marginTop: "6px",
-                  animation: hasAnimated ? `pixelReveal 0.6s steps(6) ${i * 0.1}s both` : "none",
-                  "--pixel-text": text,
-                  "--pixel-bg": isDark ? "#161616" : "#DADADA",
-                  "--pixel-border": borderColor,
-                } as React.CSSProperties}
-              >
+                  animation: hasAnimated ? `popZoomOut 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) ${i * 0.06}s backwards` : "none",
+                }}>
                 <p className="text-xs font-bold leading-tight truncate">{exp.company}</p>
                 <p className="text-[10px] leading-tight truncate" style={{ opacity: 0.7 }}>{exp.role}</p>
               </div>
@@ -232,24 +228,11 @@ export default function TimelineSection({ isDark, text, borderColor }: TimelineS
           background-color: ${hoverBg(isDark)} !important;
           color: ${hoverText(isDark)} !important;
         }
-        @keyframes pixelReveal {
-          0% {
-            clip-path: inset(50% 50% 50% 50%);
-            background-color: var(--pixel-text);
-            color: var(--pixel-bg);
-            border-color: var(--pixel-text);
-          }
-          80% {
-            background-color: var(--pixel-text);
-            color: var(--pixel-bg);
-            border-color: var(--pixel-text);
-          }
-          100% {
-            clip-path: inset(0% 0% 0% 0%);
-            background-color: transparent;
-            color: var(--pixel-text);
-            border-color: var(--pixel-border);
-          }
+        @keyframes popZoomOut {
+          0% { transform: scale(0); opacity: 0; }
+          65% { transform: scale(1.08); opacity: 1; }
+          80% { transform: scale(0.95); }
+          100% { transform: scale(1); opacity: 1; }
         }
       `}</style>
     </div>

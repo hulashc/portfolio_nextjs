@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface CardGalleryProps {
   isDark: boolean;
@@ -27,14 +27,11 @@ export default function CardGallery({ isDark, text, borderColor }: CardGalleryPr
           observer.disconnect();
         }
       },
-      { threshold: 0.15 }
+      { threshold: 0.5 }
     );
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
-
-  const hoverBg = isDark ? "#DADADA" : "#161616";
-  const hoverText = isDark ? "#161616" : "#DADADA";
 
   return (
     <div ref={sectionRef} style={{ border: `1px solid ${borderColor}` }} className="p-3 md:p-4">
@@ -48,12 +45,12 @@ export default function CardGallery({ isDark, text, borderColor }: CardGalleryPr
         {cards.map((card, i) => (
           <div
             key={card.title}
-            className="edu-card flex flex-col max-lg:snap-center max-lg:w-[82vw] max-lg:flex-shrink-0 lg:flex-1 overflow-hidden rounded-lg"
+            className="flex flex-col max-lg:snap-center max-lg:w-[82vw] max-lg:flex-shrink-0 lg:flex-1 overflow-hidden rounded-lg"
             style={{
               border: `1px solid ${borderColor}`,
-              animation: hasAnimated ? `eduCardReveal 0.5s steps(6) ${i * 0.1}s both` : "none",
-            }}
-          >
+              opacity: hasAnimated ? undefined : 0,
+              animation: hasAnimated ? `slideInRight 0.5s ease-out ${i * 0.08}s backwards` : "none",
+            }}>
             <div
               className="w-full flex items-center justify-center p-5 md:p-6"
               style={{ backgroundColor: isDark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.03)" }}
@@ -79,26 +76,9 @@ export default function CardGallery({ isDark, text, borderColor }: CardGalleryPr
         ))}
       </div>
       <style>{`
-        .edu-card {
-          transition: background-color 0.3s ease !important;
-        }
-        .edu-card:hover {
-          background-color: ${hoverBg} !important;
-        }
-        .edu-card:hover h4,
-        .edu-card:hover p {
-          color: ${hoverText} !important;
-        }
-        .edu-card:hover div:first-child {
-          background-color: ${hoverBg} !important;
-        }
-        .edu-card:hover img {
-          filter: ${isDark ? "brightness(0)" : "brightness(0) invert(1)"} !important;
-        }
-        @keyframes eduCardReveal {
-          0% { clip-path: inset(50% 50% 50% 50%); opacity: 0; }
-          60% { opacity: 1; }
-          100% { clip-path: inset(0% 0% 0% 0%); opacity: 1; }
+        @keyframes slideInRight {
+          0% { transform: translateX(80px); opacity: 0; }
+          100% { transform: translateX(0); opacity: 1; }
         }
       `}</style>
     </div>

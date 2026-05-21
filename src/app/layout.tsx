@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import SmoothScroll from "@/components/SmoothScroll";
+import PageIntro from "@/components/PageIntro";
 
 const asimovian = Asimovian({
   variable: "--font-sans",
@@ -26,8 +27,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="preload" href="/images/hero-image.png" as="image" />
+      </head>
       <body className={`min-h-screen dark ${asimovian.variable}`}>
         <ThemeProvider>
+          <PageIntro />
           <LanguageProvider>
             <SmoothScroll>
               {children}

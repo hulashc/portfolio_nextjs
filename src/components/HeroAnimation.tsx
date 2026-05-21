@@ -265,6 +265,7 @@ export default function HeroAnimation() {
           <img
             src={item.imageSrc}
             alt="Hero"
+            fetchPriority="high"
             style={{
               position: 'absolute',
               inset: 0,
